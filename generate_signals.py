@@ -13,13 +13,12 @@ import random
 
 # Конфигурация - используем актуальные ликвидные контракты 2026 (M6)
 TICKERS = [
-    {"ticker": "BR-6.26", "name": "Нефть Brent", "secid": "BRM6"},
-    {"ticker": "NG-6.26", "name": "Газ Henry Hub", "secid": "NGM6"},
-    {"ticker": "GD-6.26", "name": "Золото", "secid": "GDM6"},
-    {"ticker": "SV-6.26", "name": "Серебро", "secid": "SVM6"},
-    {"ticker": "Si-6.26", "name": "USD/RUB", "secid": "SiM6"},
-    {"ticker": "MX-6.26", "name": "Индекс Московская", "secid": "MXM6"}
-]
+    {"ticker": "BR-4.26", "name": "Нефть Brent", "secid": "BRJ6"},
+    {"ticker": "NG-4.26", "name": "Газ Henry Hub", "secid": "NGJ6"},
+    {"ticker": "GOLD-4.26", "name": "Золото", "secid": "GOLDJ6"},
+    {"ticker": "SILV-4.26", "name": "Серебро", "secid": "SILVJ6"},
+    {"ticker": "Si-4.26", "name": "USD/RUB", "secid": "SiJ6"},
+    {"ticker": "MIX-4.26", "name": "Индекс МосБиржи", "secid": "MIXJ6"}]
 
 MOEX_API_BASE = "https://iss.moex.com/iss"
 
@@ -163,13 +162,13 @@ def main():
                 print(f"⚠ No price for {ticker_info['ticker']}, using simulation")
                 # Симулируем цену для демо
                 sim_prices = {
-                    "BRM6": 85.50,
-                    "NGM6": 3.20,
-                    "GDM6": 2850.00,
-                    "SVM6": 32.50,
-                    "SiM6": 89.50,
-                    "MXM6": 2750.00
-                }
+                    sim_prices = {
+                        "BRJ6": 73.20,
+                        "NGJ6": 2.88,
+                        "GOLDJ6": 5300.00,
+                        "SILVJ6": 95.50,
+                        "SiJ6": 77500.00,
+                        "MIXJ6": 283000.00                }
                 price = sim_prices.get(ticker_info['secid'], 100.0)
                 signal = generate_signal(ticker_info, price)
                 signals.append(signal)
