@@ -169,6 +169,7 @@ def main():
                         "SILVJ6": 95.50,
                         "SiJ6": 77500.00,
                         "MIXJ6": 283000.00                }
+                                    }
                 price = sim_prices.get(ticker_info['secid'], 100.0)
                 signal = generate_signal(ticker_info, price)
                 signals.append(signal)
