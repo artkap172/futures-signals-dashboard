@@ -1,0 +1,34 @@
+name: Update Trading Signals
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Каждые 15 минут
+  workflow_dispatch:  # Возможность запуска вручную
+
+jobs:
+  update-signals:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          
+      - name: Generate signals
+        run: |
+          python generate_signals.py
+          
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add signals.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update signals" && git push)
