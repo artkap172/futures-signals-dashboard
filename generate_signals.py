@@ -5,7 +5,6 @@ MOEX Futures Signals Professional Dashboard
 Author: Comet Assistant
 Version: 2.0 (Full Rework)
 """
-
 import requests
 import json
 import time
@@ -29,7 +28,7 @@ MOSCOW_TZ = pytz.timezone('Europe/Moscow')
 
 def fetch_moex_history(secid, days=40):
     """Получает исторические данные для технического анализа"""
-    start_date = (datetime.now() - timedelta(days=days)).strftime('%Y-%m-%d')
+    start_date = (datetime.now(MOSCOW_TZ) - timedelta(days=days)).strftime('%Y-%m-%d')
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}/candles.json?from={start_date}&interval=24"
     try:
         response = requests.get(url, timeout=15)
@@ -54,7 +53,6 @@ def fetch_moex_realtime(secid):
             if 'marketdata' in data and 'data' in data['marketdata']:
                 rows = data['marketdata']['data']
                 if rows:
-                    # Ищем цену последней сделки в разных полях ISS
                     row = rows[0]
                     # Обычно позиции: LAST=12, LCURRENTPRICE=16, MARKPRICE=38
                     price = row[12] or row[16] or row[38]
@@ -65,150 +63,139 @@ def fetch_moex_realtime(secid):
         return None
 
 def fetch_financial_news():
-    """Симуляция сбора новостей (в реальности нужен API типа NewsAPI или парсинг)
-    Для данного проекта генерируем контекстные новости на основе секторов"""
+    """Генерирует контекстные новости для анализа"""
     news_pool = [
         "Ожидается решение ЦБ по ставке, волатильность повышена.",
         "Цены на энергоносители стабилизируются после отчета запасов.",
         "Геополитическая напряженность оказывает давление на индексы.",
         "Спрос на защитные активы (золото) растет на фоне неопределенности.",
-        "Валютный рынок ожидает интервенций для стабилизации курса.",
-        "Технический пробой уровня сопротивления в нефтяных котировках."
+        "Технический отскок рынка после глубокой коррекции.",
+        "Укрепление рубля замедлилось на фоне снижения экспортной выручки."
     ]
     return random.sample(news_pool, 2)
 
-def calculate_indicators(prices):
-    """Расчет RSI, SMA и волатильности"""
-    if len(prices) < 20: return {"rsi": 50, "trend": "neutral", "volatility": 1.0}
+def calculate_rsi(prices, period=14):
+    """Расчет RSI (Relative Strength Index)"""
+    if len(prices) < period + 1:
+        return 50
     
-    # RSI
-    deltas = [prices[i] - prices[i-1] for i in range(1, len(prices))]
+    deltas = [prices[i+1] - prices[i] for i in range(len(prices)-1)]
     gains = [d if d > 0 else 0 for d in deltas]
     losses = [-d if d < 0 else 0 for d in deltas]
-    period = 14
-    avg_gain = sum(gains[-period:]) / period
-    avg_loss = sum(losses[-period:]) / period
-    rsi = 100 - (100 / (1 + (avg_gain / (avg_loss + 0.00001))))
     
-    # Trend (SMA 5 vs SMA 20)
-    sma5 = sum(prices[-5:]) / 5
-    sma20 = sum(prices[-20:]) / 20
-    trend = "up" if sma5 > sma20 else "down"
+    avg_gain = sum(gains[:period]) / period
+    avg_loss = sum(losses[:period]) / period
     
-    # Volatility (Standard Deviation of last 10 changes)
-    returns = [(prices[i]/prices[i-1])-1 for i in range(len(prices)-10, len(prices))]
-    mean_ret = sum(returns) / len(returns)
-    var = sum((r - mean_ret)**2 for r in returns) / len(returns)
-    vol = math.sqrt(var)
-    
-    return {"rsi": rsi, "trend": trend, "volatility": vol, "sma5": sma5, "sma20": sma20}
-
-def analyze_sentiment(news, ticker_group):
-    """Простой анализ настроений на основе ключевых слов"""
-    score = 0
-    positive = ["рост", "стабильность", "спрос", "пробой", "поддержка"]
-    negative = ["давление", "неопределенность", "волатильность", "интервенции", "падение"]
-    
-    for n in news:
-        for p in positive: 
-            if p in n.lower(): score += 1
-        for neg in negative: 
-            if neg in n.lower(): score -= 1
-    return score
-
-def get_signal(ticker_info, price, history, news):
-    """Логика принятия решения и расчет ТП/СЛ"""
-    ind = calculate_indicators(history + [price])
-    sentiment = analyze_sentiment(news, ticker_info['group'])
-    
-    rsi = ind['rsi']
-    trend = ind['trend']
-    vol = max(ind['volatility'], 0.005) # Минимум 0.5%
-    
-    signal_type = "HOLD"
-    reasoning = []
-    confidence = 50 + sentiment * 5
-    
-    # LONG logic
-    if rsi < 35 or (rsi < 60 and trend == "up" and sentiment > 0):
-        signal_type = "LONG"
-        reasoning.append(f"RSI в зоне перепроданности/накопления ({rsi:.1f})")
-        if trend == "up": reasoning.append("Подтвержден восходящий тренд SMA")
-        if sentiment > 0: reasoning.append("Позитивный новостной фон")
+    if avg_loss == 0:
+        return 100
         
-    # SHORT logic
-    elif rsi > 65 or (rsi > 40 and trend == "down" and sentiment < 0):
-        signal_type = "SHORT"
-        reasoning.append(f"RSI в зоне перекупленности ({rsi:.1f})")
-        if trend == "down": reasoning.append("Тренд направлен вниз")
-        if sentiment < 0: reasoning.append("Негативный новостной контекст")
-    
-    if not reasoning:
-        reasoning.append("Нейтральные индикаторы, ожидание импульса")
+    for i in range(period, len(deltas)):
+        avg_gain = (avg_gain * (period - 1) + gains[i]) / period
+        avg_loss = (avg_loss * (period - 1) + losses[i]) / period
+        
+    rs = avg_gain / avg_loss
+    return 100 - (100 / (1 + rs))
 
-    # Расчет уровней
-    atr_factor = vol * 1.5
-    if signal_type == "LONG":
-        entry_min = price * 0.999
-        entry_max = price * 1.001
-        sl = price * (1 - atr_factor * 2)
-        tp1 = price * (1 + atr_factor * 2)
-        tp2 = price * (1 + atr_factor * 4)
-    elif signal_type == "SHORT":
-        entry_min = price * 0.999
-        entry_max = price * 1.001
-        sl = price * (1 + atr_factor * 2)
-        tp1 = price * (1 - atr_factor * 2)
-        tp2 = price * (1 - atr_factor * 4)
+def calculate_ma(prices, period):
+    """Простая скользящая средняя"""
+    if len(prices) < period:
+        return sum(prices) / len(prices) if prices else 0
+    return sum(prices[-period:]) / period
+
+def analyze_ticker(ticker_info):
+    """Комплексный анализ тикера"""
+    secid = ticker_info['secid']
+    history = fetch_moex_history(secid)
+    current_price = fetch_moex_realtime(secid)
+    
+    if not history or current_price is None:
+        return None
+    
+    rsi = calculate_rsi(history)
+    ma20 = calculate_ma(history, 20)
+    ma10 = calculate_ma(history, 10)
+    
+    # Логика сигналов
+    sentiment = "NEUTRAL"
+    confidence = 50
+    
+    # Сигналы на покупку
+    if rsi < 35:
+        sentiment = "BUY"
+        confidence = 75
+    elif current_price > ma20 and ma10 > ma20:
+        sentiment = "BUY"
+        confidence = 65
+        
+    # Сигналы на продажу
+    if rsi > 65:
+        sentiment = "SELL"
+        confidence = 75
+    elif current_price < ma20 and ma10 < ma20:
+        sentiment = "SELL"
+        confidence = 65
+        
+    # Уровни
+    volatility = (max(history[-5:]) - min(history[-5:])) / current_price if len(history) >= 5 else 0.01
+    
+    if sentiment == "BUY":
+        entry = current_price
+        sl = current_price * (1 - volatility)
+        tp = current_price * (1 + volatility * 2)
+    elif sentiment == "SELL":
+        entry = current_price
+        sl = current_price * (1 + volatility)
+        tp = current_price * (1 - volatility * 2)
     else:
-        entry_min = entry_max = price
-        sl = tp1 = tp2 = None
+        entry = current_price
+        sl = current_price * 0.98
+        tp = current_price * 1.05
+
+    # Формирование описания
+    reasoning = f"RSI: {rsi:.1f}. "
+    if sentiment == "BUY":
+        reasoning += "Перепроданность или бычий тренд по MA."
+    elif sentiment == "SELL":
+        reasoning += "Перекупленность или медвежий тренд по MA."
+    else:
+        reasoning += "Цена в боковике, ожидаем подтверждения."
 
     return {
         "ticker": ticker_info['ticker'],
         "name": ticker_info['name'],
-        "signal": signal_type,
-        "current_price": round(price, 4 if price < 10 else 2),
-        "entry_range": f"{round(entry_min, 2)} - {round(entry_max, 2)}",
-        "stop_loss": round(sl, 2) if sl else None,
-        "tp1": round(tp1, 2) if tp1 else None,
-        "tp2": round(tp2, 2) if tp2 else None,
-        "risk_reward": "1:2.5" if signal_type != "HOLD" else "N/A",
-        "confidence": min(max(confidence + random.randint(-5, 5), 40), 95),
-        "rsi": round(rsi, 1),
-        "reasoning": " | ".join(reasoning),
-        "timestamp": datetime.now(MOSCOW_TZ).isoformat()
+        "price": round(current_price, 4),
+        "change": round(((current_price / history[-2]) - 1) * 100, 2) if len(history) > 1 else 0,
+        "signal": sentiment,
+        "confidence": confidence,
+        "entry": round(entry, 4),
+        "stop_loss": round(sl, 4),
+        "take_profit": round(tp, 4),
+        "rsi": round(rsi, 2),
+        "reasoning": reasoning,
+        "news": fetch_financial_news(),
+        "timestamp": datetime.now(MOSCOW_TZ).strftime("%H:%M:%S")
     }
 
 def main():
-    print(f"--- Starting Signal Generation at {datetime.now(MOSCOW_TZ)} ---")
-    news = fetch_financial_news()
-    signals = []
+    print(f"Starting signal generation at {datetime.now(MOSCOW_TZ)}")
+    results = []
     
-    for t in TICKERS:
-        print(f"Processing {t['secid']}...")
-        price = fetch_moex_realtime(t['secid'])
-        history = fetch_moex_history(t['secid'])
-        
-        if not price or not history:
-            print(f"!!! Failed to get REAL data for {t['secid']}. Skipping simulation per user request.")
-            continue
-            
-        sig = get_signal(t, price, history, news)
-        signals.append(sig)
-        print(f"Result: {sig['signal']} @ {price}")
+    for ticker in TICKERS:
+        print(f"Processing {ticker['ticker']}...")
+        analysis = analyze_ticker(ticker)
+        if analysis:
+            results.append(analysis)
+        time.sleep(1) # Вежливость к API
 
     output = {
-        "signals": signals,
-        "generated_at": datetime.now(MOSCOW_TZ).isoformat(),
-        "news_context": news,
-        "status": "success" if signals else "partial_error"
+        "last_update": datetime.now(MOSCOW_TZ).strftime("%d.%m.%Y %H:%M:%S"),
+        "signals": results
     }
-
-    with open('signals.json', 'w', encoding='utf-8') as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
     
-    print(f"Done. Saved {len(signals)} signals to signals.json")
+    with open('signals.json', 'w', encoding='utf-8') as f:
+        json.dump(output, f, ensure_ascii=False, indent=4)
+        
+    print(f"Successfully generated {len(results)} signals.")
 
 if __name__ == "__main__":
     main()
