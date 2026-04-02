@@ -3,173 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Futures Signals Dashboard | MOEX</title>
+    <title>MOEX Futures Signals | Professional Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; }
-        .header { background: #161b22; border-bottom: 1px solid #30363d; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 1.8rem; color: #58a6ff; }
-        .delay-notice { background: #ffd60a; color: #000; padding: 0.75rem 2rem; text-align: center; font-weight: 600; }
-        .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.6; }
+        .header { background: #161b22; border-bottom: 1px solid #30363d; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-size: 1.5rem; color: #58a6ff; display: flex; align-items: center; gap: 10px; }
+        .update-time { text-align: right; }
+        .update-label { color: #8b949e; font-size: 0.7rem; text-transform: uppercase; }
+        #lastUpdate { font-weight: bold; color: #58a6ff; font-family: monospace; }
         
-        .news-box { background: rgba(88, 166, 255, 0.1); border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
-        .news-title { color: #58a6ff; font-weight: bold; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.9rem; }
-        .news-item { margin-bottom: 0.3rem; line-height: 1.4; }
+        .delay-notice { background: #ffd60a; color: #000; padding: 0.5rem; text-align: center; font-size: 0.85rem; font-weight: 600; }
+        .container { max-width: 1400px; margin: 1.5rem auto; padding: 0 1rem; }
+        
+        .news-box { background: rgba(88, 166, 255, 0.05); border: 1px solid #30363d; border-radius: 12px; padding: 1.2rem; margin-bottom: 1.5rem; }
+        .news-title { color: #58a6ff; font-weight: bold; margin-bottom: 0.8rem; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+        .news-item { margin-bottom: 0.5rem; padding-left: 1.2rem; position: relative; font-size: 0.95rem; }
+        .news-item::before { content: "•"; position: absolute; left: 0; color: #58a6ff; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; transition: transform 0.2s; }
-        .card:hover { border-color: #58a6ff; transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.2rem; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; transition: transform 0.2s, border-color 0.2s; position: relative; overflow: hidden; }
+        .card:hover { border-color: #58a6ff; transform: translateY(-3px); }
         
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .ticker { font-size: 1.4rem; font-weight: 700; color: #58a6ff; }
-        .signal { padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; font-size: 1rem; }
-        .signal.long { background: #238636; color: white; }
-        .signal.short { background: #da3633; color: white; }
-        .signal.hold { background: #30363d; color: #8b949e; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .ticker-info { display: flex; flex-direction: column; }
+        .ticker { font-size: 1.4rem; font-weight: 800; color: #f0f6fc; }
+        .name { font-size: 0.85rem; color: #8b949e; }
         
-        .price { font-size: 2.2rem; font-weight: 700; margin: 0.5rem 0; letter-spacing: -1px; }
-        .instrument-name { color: #8b949e; font-size: 0.95rem; margin-bottom: 1.2rem; }
+        .signal-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .buy { background: rgba(47, 129, 65, 0.2); color: #3fb950; border: 1px solid #238636; }
+        .sell { background: rgba(248, 81, 73, 0.2); color: #f85149; border: 1px solid #da3633; }
+        .neutral { background: rgba(110, 118, 129, 0.2); color: #8b949e; border: 1px solid #30363d; }
+
+        .price-section { margin: 1rem 0; }
+        .price { font-size: 2.2rem; font-weight: 700; color: #f0f6fc; font-family: 'SF Mono', monospace; }
         
-        .confidence-label { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.9rem; color: #8b949e; }
-        .confidence-bar { height: 10px; background: #30363d; border-radius: 5px; overflow: hidden; margin-bottom: 1.5rem; }
-        .confidence-fill { height: 100%; background: linear-gradient(90deg, #3fb950, #58a6ff); }
-        
-        .reasoning { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; margin: 1rem 0; }
-        .reasoning-title { color: #8b949e; font-size: 0.85rem; margin-bottom: 0.6rem; font-weight: bold; }
-        .reasoning-text { font-size: 0.95rem; line-height: 1.5; color: #c9d1d9; }
+        .confidence-container { margin-bottom: 1.5rem; }
+        .confidence-header { display: flex; justify-content: space-between; font-size: 0.8rem; color: #8b949e; margin-bottom: 0.4rem; }
+        .bar-bg { height: 6px; background: #30363d; border-radius: 3px; }
+        .bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease-out; }
+        .buy-fill { background: #3fb950; }
+        .sell-fill { background: #f85149; }
+        .neutral-fill { background: #58a6ff; }
+
+        .reasoning { background: #0d1117; border-radius: 8px; padding: 1rem; margin-bottom: 1.2rem; font-size: 0.9rem; border-left: 3px solid #58a6ff; }
         
         .params { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-        .param-card { background: #0d1117; border: 1px solid #21262d; padding: 0.8rem; border-radius: 4px; }
-        .p-label { display: block; color: #8b949e; font-size: 0.75rem; margin-bottom: 0.2rem; }
-        .p-value { font-weight: 700; font-size: 1rem; color: #f0f6fc; }
-        
-        .footer { text-align: center; padding: 3rem; color: #8b949e; font-size: 0.9rem; border-top: 1px solid #30363d; }
+        .param-item { background: #21262d; padding: 0.6rem; border-radius: 6px; border: 1px solid #30363d; }
+        .p-label { display: block; font-size: 0.65rem; color: #8b949e; text-transform: uppercase; margin-bottom: 0.2rem; font-weight: 600; }
+        .p-value { display: block; font-size: 0.95rem; font-weight: 700; color: #f0f6fc; font-family: monospace; }
+
+        .footer { text-align: center; padding: 3rem 1rem; color: #8b949e; font-size: 0.8rem; border-top: 1px solid #30363d; margin-top: 3rem; }
         .footer a { color: #58a6ff; text-decoration: none; }
+        
+        #error-msg { display: none; background: #f85149; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📈 Professional MOEX Futures Signals</h1>
-        <div style="text-align: right">
-            <div style="color: #8b949e; font-size: 0.8rem">ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ</div>
-            <div id="lastUpdate" style="font-weight: bold; color: #58a6ff">загрузка...</div>
+        <h1>📊 MOEX Futures Radar</h1>
+        <div class="update-time">
+            <div class="update-label">Последнее обновление (МСК)</div>
+            <div id="lastUpdate">ОЖИДАНИЕ...</div>
         </div>
     </div>
-
     <div class="delay-notice">
-        ⚠️ ДАННЫЕ В РЕЖИМЕ РЕАЛЬНОГО ВРЕМЕНИ (ЗАДЕРЖКА 15 МИНУТ) | РАСЧЕТ ИДЕТ НА ОСНОВЕ ТЕХ. АНАЛИЗА И НОВОСТЕЙ
+        ДАННЫЕ ISS MOEX (ЗАДЕРЖКА 15 МИН) | ТЕХНИЧЕСКИЙ АНАЛИЗ RSI + MA
     </div>
-
     <div class="container">
+        <div id="error-msg"></div>
         <div id="newsSection" class="news-box" style="display: none;">
-            <div class="news-title">Рыночный фон и Анализ новостей:</div>
-            <div id="newsContent" class="reasoning-text"></div>
+            <div class="news-title">🌐 Рыночный контекст:</div>
+            <div id="newsContent"></div>
         </div>
-
         <div class="grid" id="signalsGrid">
             <!-- Cards will be injected here -->
         </div>
     </div>
-
     <div class="footer">
-        <p>Технический анализ: RSI(14), SMA(5/20), ATR Volatility. Обработка новостей: NLP Sentiment Analysis.</p>
-        <p>Данные предоставлены <a href="https://iss.moex.com" target="_blank">MOEX ISS API</a>.</p>
-        <p style="margin-top: 1rem; color: #f85149; font-weight: bold;">Торговля фьючерсами сопряжена с высоким риском. Не является индивидуальной инвестиционной рекомендацией.</p>
+        <p>© 2026 MOEX Futures Signals Dashboard. Алгоритм: RSI(14) + SMA(20) + Sentiment.</p>
+        <p>Данные предоставлены <a href="https://iss.moex.com" target="_blank">Московской Биржей</a>.</p>
+        <p style="color: #f85149; margin-top: 1rem; font-weight: bold;">Торговля деривативами сопряжена с риском потери капитала.</p>
     </div>
 
     <script>
-        const SIGNALS_URL = `signals.json?nocache=${Date.now()}`;
-
-        async function updateDashboard() {
+        async function loadSignals() {
             try {
-                const response = await fetch(SIGNALS_URL);
-                if (!response.ok) throw new Error("Failed to fetch signals");
+                const response = await fetch(`signals.json?v=${Date.now()}`);
+                if (!response.ok) throw new Error("Файл сигналов не найден");
                 const data = await response.json();
-
-                // 1. Update Timestamp
-                const genAt = data.generated_at || data.timestamp;
-                document.getElementById('lastUpdate').textContent = new Date(genAt).toLocaleTimeString('ru-RU', {
-                    hour: '2-digit', minute: '2-digit', second: '2-digit'
-                });
-
-                // 2. Update News
+                
+                // Update time
+                document.getElementById('lastUpdate').textContent = data.last_update || "—";
+                
+                // Update News
                 const newsSection = document.getElementById('newsSection');
                 if (data.news_context && data.news_context.length > 0) {
                     newsSection.style.display = 'block';
-                    document.getElementById('newsContent').innerHTML = data.news_context.map(n => `• ${n}`).join('<br>');
+                    document.getElementById('newsContent').innerHTML = data.news_context.map(n => `<div class="news-item">${n}</div>`).join('');
                 } else {
                     newsSection.style.display = 'none';
                 }
 
-                // 3. Update Grid
+                // Update Grid
                 const grid = document.getElementById('signalsGrid');
                 grid.innerHTML = '';
+                
+                if (!data.signals || data.signals.length === 0) {
+                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #8b949e;">Нет активных сигналов в данный момент</div>';
+                    return;
+                }
 
                 data.signals.forEach(sig => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     
-                    const sType = (sig.signal || 'HOLD').toLowerCase();
-                    const priceFormatted = sig.current_price.toLocaleString('ru-RU');
-
-                    card.innerHTML = \`
+                    const signalClass = sig.signal.toLowerCase();
+                    const barColorClass = signalClass + '-fill';
+                    
+                    card.innerHTML = `
                         <div class="card-header">
-                            <div class="ticker">\${sig.ticker}</div>
-                            <div class="signal \${sType}">\${sig.signal}</div>
+                            <div class="ticker-info">
+                                <span class="ticker">${sig.ticker}</span>
+                                <span class="name">${sig.name}</span>
+                            </div>
+                            <span class="signal-badge ${signalClass}">${sig.signal}</span>
                         </div>
-                        <div class="price">\${priceFormatted}</div>
-                        <div class="instrument-name">\${sig.name}</div>
-
-                        <div class="confidence-label">
-                            <span>Уверенность сигнала</span>
-                            <span>\${sig.confidence}%</span>
+                        <div class="price-section">
+                            <div class="price">${sig.current_price.toLocaleString('ru-RU')}</div>
                         </div>
-                        <div class="confidence-bar">
-                            <div class="confidence-fill" style="width: \${sig.confidence}%"></div>
+                        <div class="confidence-container">
+                            <div class="confidence-header">
+                                <span>Вероятность</span>
+                                <span>${sig.confidence}%</span>
+                            </div>
+                            <div class="bar-bg">
+                                <div class="bar-fill ${barColorClass}" style="width: ${sig.confidence}%"></div>
+                            </div>
                         </div>
-
-                        <div class="reasoning">
-                            <div class="reasoning-title">ТЕХНИЧЕСКОЕ ОБОСНОВАНИЕ И НОВОСТИ:</div>
-                            <div class="reasoning-text">\${sig.reasoning}</div>
-                        </div>
-
+                        <div class="reasoning">${sig.reasoning}</div>
                         <div class="params">
-                            <div class="param-card">
-                                <span class="p-label">ВХОД (RANGE)</span>
-                                <span class="p-value">\${sig.entry_range}</span>
+                            <div class="param-item">
+                                <span class="p-label">Вход</span>
+                                <span class="p-value">${sig.entry_range}</span>
                             </div>
-                            <div class="param-card">
-                                <span class="p-label">STOP LOSS</span>
-                                <span class="p-value" style="color: #f85149">\${sig.stop_loss || '—'}</span>
+                            <div class="param-item">
+                                <span class="p-label">Stop Loss</span>
+                                <span class="p-value" style="color: #f85149">${sig.stop_loss}</span>
                             </div>
-                            <div class="param-card">
-                                <span class="p-label">TAKE PROFIT 1</span>
-                                <span class="p-value" style="color: #3fb950">\${sig.tp1 || '—'}</span>
+                            <div class="param-item">
+                                <span class="p-label">TP 1</span>
+                                <span class="p-value" style="color: #3fb950">${sig.tp1}</span>
                             </div>
-                            <div class="param-card">
-                                <span class="p-label">TAKE PROFIT 2</span>
-                                <span class="p-value" style="color: #3fb950">\${sig.tp2 || '—'}</span>
-                            </div>
-                            <div class="param-card">
-                                <span class="p-label">РИСК/ПРИБЫЛЬ</span>
-                                <span class="p-value">\${sig.risk_reward}</span>
-                            </div>
-                            <div class="param-card">
-                                <span class="p-label">RSI (14)</span>
-                                <span class="p-value">\${sig.rsi}</span>
+                            <div class="param-item">
+                                <span class="p-label">Risk/Reward</span>
+                                <span class="p-value">${sig.risk_reward}</span>
                             </div>
                         </div>
-                    \`;
+                    `;
                     grid.appendChild(card);
                 });
-
             } catch (err) {
-                console.error("Dashboard error:", err);
+                console.error(err);
+                document.getElementById('error-msg').style.display = 'block';
+                document.getElementById('error-msg').textContent = "Ошибка загрузки данных: " + err.message;
             }
         }
 
-        updateDashboard();
-        setInterval(updateDashboard, 60000); // Auto update every minute
+        loadSignals();
+        setInterval(loadSignals, 60000);
     </script>
 </body>
 </html>
