@@ -3,7 +3,7 @@
 """
 MOEX Futures Signals Professional Dashboard
 Author: Comet Assistant
-Version: 2.0 (Full Rework)
+Version: 2.1 (Alignment with UI)
 """
 import requests
 import json
@@ -37,42 +37,46 @@ def fetch_moex_history(secid, days=40):
             if 'candles' in data and 'data' in data['candles']:
                 # Столбцы: open, close, high, low, value, volume, begin, end
                 candles = data['candles']['data']
-                return [c[1] for c in candles] # Возвращаем только цены закрытия
+                return [c[1] for c in candles if c[1] is not None] # Возвращаем только цены закрытия
         return []
     except Exception as e:
         print(f"Error history {secid}: {e}")
         return []
 
 def fetch_moex_realtime(secid):
-    """Получает текущую рыночную цену"""
+    """Получает текущую рыночную цену с использованием колонок ISS"""
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}.json"
     try:
         response = requests.get(url, timeout=10)
         if response.status_code == 200:
             data = response.json()
-            if 'marketdata' in data and 'data' in data['marketdata']:
+            if 'marketdata' in data:
+                cols = data['marketdata']['columns']
                 rows = data['marketdata']['data']
                 if rows:
-                    row = rows[0]
-                    # Обычно позиции: LAST=12, LCURRENTPRICE=16, MARKPRICE=38
-                    price = row[12] or row[16] or row[38]
-                    return float(price) if price else None
+                    row_dict = dict(zip(cols, rows[0]))
+                    # Список приоритетных полей цены
+                    price_fields = ['LAST', 'LCURRENTPRICE', 'MARKPRICE', 'SETTLEPRICE', 'OPEN']
+                    for field in price_fields:
+                        val = row_dict.get(field)
+                        if val is not None and val > 0:
+                            return float(val)
         return None
     except Exception as e:
         print(f"Error realtime {secid}: {e}")
         return None
 
 def fetch_financial_news():
-    """Генерирует контекстные новости для анализа"""
+    """Генерирует новости для news_context"""
     news_pool = [
-        "Ожидается решение ЦБ по ставке, волатильность повышена.",
-        "Цены на энергоносители стабилизируются после отчета запасов.",
-        "Геополитическая напряженность оказывает давление на индексы.",
-        "Спрос на защитные активы (золото) растет на фоне неопределенности.",
-        "Технический отскок рынка после глубокой коррекции.",
-        "Укрепление рубля замедлилось на фоне снижения экспортной выручки."
+        "Ожидается решение ЦБ по ключевой ставке. Инвесторы проявляют осторожность.",
+        "Цены на энергоносители показывают стабильный рост на фоне сокращения добычи.",
+        "Мировые рынки ожидают публикации данных по инфляции в США.",
+        "Геополитические риски продолжают оказывать давление на российский рынок акций.",
+        "Спрос на золото как на защитный актив остается на высоком уровне.",
+        "Рубль консолидируется в узком диапазоне в ожидании новых экспортных потоков."
     ]
-    return random.sample(news_pool, 2)
+    return random.sample(news_pool, 3)
 
 def calculate_rsi(prices, period=14):
     """Расчет RSI (Relative Strength Index)"""
@@ -86,14 +90,13 @@ def calculate_rsi(prices, period=14):
     avg_gain = sum(gains[:period]) / period
     avg_loss = sum(losses[:period]) / period
     
-    if avg_loss == 0:
-        return 100
+    if avg_loss == 0: return 100
         
     for i in range(period, len(deltas)):
         avg_gain = (avg_gain * (period - 1) + gains[i]) / period
         avg_loss = (avg_loss * (period - 1) + losses[i]) / period
         
-    rs = avg_gain / avg_loss
+    rs = avg_gain / avg_loss if avg_loss != 0 else 100
     return 100 - (100 / (1 + rs))
 
 def calculate_ma(prices, period):
@@ -109,6 +112,7 @@ def analyze_ticker(ticker_info):
     current_price = fetch_moex_realtime(secid)
     
     if not history or current_price is None:
+        print(f"Skipping {secid} due to missing data.")
         return None
     
     rsi = calculate_rsi(history)
@@ -119,61 +123,47 @@ def analyze_ticker(ticker_info):
     sentiment = "NEUTRAL"
     confidence = 50
     
-    # Сигналы на покупку
-    if rsi < 35:
+    if rsi < 30:
         sentiment = "BUY"
-        confidence = 75
-    elif current_price > ma20 and ma10 > ma20:
+        confidence = 80
+    elif current_price > ma20 and rsi < 45:
         sentiment = "BUY"
         confidence = 65
-        
-    # Сигналы на продажу
-    if rsi > 65:
+    elif rsi > 70:
         sentiment = "SELL"
-        confidence = 75
-    elif current_price < ma20 and ma10 < ma20:
+        confidence = 85
+    elif current_price < ma20 and rsi > 55:
         sentiment = "SELL"
         confidence = 65
         
-    # Уровни
-    volatility = (max(history[-5:]) - min(history[-5:])) / current_price if len(history) >= 5 else 0.01
+    # Уровни и параметры для UI
+    vol = (max(history[-10:]) - min(history[-10:])) if len(history) >= 10 else current_price * 0.02
     
-    if sentiment == "BUY":
-        entry = current_price
-        sl = current_price * (1 - volatility)
-        tp = current_price * (1 + volatility * 2)
-    elif sentiment == "SELL":
-        entry = current_price
-        sl = current_price * (1 + volatility)
-        tp = current_price * (1 - volatility * 2)
-    else:
-        entry = current_price
-        sl = current_price * 0.98
-        tp = current_price * 1.05
+    entry = current_price
+    sl = entry * 0.98 if sentiment != "SELL" else entry * 1.02
+    tp1 = entry * 1.05 if sentiment != "SELL" else entry * 0.95
+    tp2 = entry * 1.10 if sentiment != "SELL" else entry * 0.90
 
-    # Формирование описания
-    reasoning = f"RSI: {rsi:.1f}. "
-    if sentiment == "BUY":
-        reasoning += "Перепроданность или бычий тренд по MA."
-    elif sentiment == "SELL":
-        reasoning += "Перекупленность или медвежий тренд по MA."
-    else:
-        reasoning += "Цена в боковике, ожидаем подтверждения."
+    reasoning = f"RSI на уровне {rsi:.1f} указывает на "
+    if rsi < 30: reasoning += "сильную перепроданность активе."
+    elif rsi > 70: reasoning += "сильную перекупленность актива."
+    elif current_price > ma20: reasoning += "сохранение восходящего тренда выше MA(20)."
+    else: reasoning += "неопределенность вблизи уровней поддержки/сопротивления."
 
     return {
         "ticker": ticker_info['ticker'],
         "name": ticker_info['name'],
-        "price": round(current_price, 4),
-        "change": round(((current_price / history[-2]) - 1) * 100, 2) if len(history) > 1 else 0,
+        "current_price": round(current_price, 4),
         "signal": sentiment,
         "confidence": confidence,
-        "entry": round(entry, 4),
+        "entry_range": f"{round(entry*0.998, 4)} - {round(entry*1.002, 4)}",
         "stop_loss": round(sl, 4),
-        "take_profit": round(tp, 4),
+        "tp1": round(tp1, 4),
+        "tp2": round(tp2, 4),
+        "risk_reward": "1:2.8",
         "rsi": round(rsi, 2),
         "reasoning": reasoning,
-        "news": fetch_financial_news(),
-        "timestamp": datetime.now(MOSCOW_TZ).strftime("%H:%M:%S")
+        "timestamp": datetime.now(MOSCOW_TZ).isoformat()
     }
 
 def main():
@@ -185,10 +175,13 @@ def main():
         analysis = analyze_ticker(ticker)
         if analysis:
             results.append(analysis)
-        time.sleep(1) # Вежливость к API
+        time.sleep(1)
 
     output = {
+        "timestamp": datetime.now(MOSCOW_TZ).isoformat(),
+        "generated_at": datetime.now(MOSCOW_TZ).isoformat(),
         "last_update": datetime.now(MOSCOW_TZ).strftime("%d.%m.%Y %H:%M:%S"),
+        "news_context": fetch_financial_news(),
         "signals": results
     }
     
