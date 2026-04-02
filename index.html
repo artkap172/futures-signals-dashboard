@@ -1,129 +1,150 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Futures Signals Dashboard | MOEX</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; }
-.header { background: #161b22; border-bottom: 1px solid #30363d; padding: 1rem 2rem; }
-.header h1 { font-size: 1.5rem; color: #58a6ff; }
-.delay-notice { background: #ffd60a; color: #000; padding: 0.75rem 2rem; text-align: center; font-weight: 500; }
-.container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-.card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1.5rem; }
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.ticker { font-size: 1.25rem; font-weight: 700; color: #58a6ff; }
-.price { font-size: 2rem; font-weight: 700; margin: 0.5rem 0; }
-.price.up { color: #3fb950; }
-.price.down { color: #f85149; }
-.change { font-size: 0.9rem; padding: 0.25rem 0.5rem; border-radius: 4px; }
-.change.up { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
-.change.down { background: rgba(248, 81, 73, 0.15); color: #f85149; }
-.signal { display: inline-flex; align-items: center; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; }
-.signal.long { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
-.signal.short { background: rgba(248, 81, 73, 0.15); color: #f85149; }
-.signal.wait { background: rgba(255, 214, 10, 0.15); color: #ffd60a; }
-.confidence-bar { height: 8px; background: #30363d; border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
-.confidence-fill { height: 100%; background: linear-gradient(90deg, #3fb950, #58a6ff); }
-.params { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; margin-top: 1rem; }
-.param-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #21262d; }
-.param-row:last-child { border-bottom: none; }
-.param-label { color: #8b949e; }
-.param-value { font-weight: 600; }
-.footer { text-align: center; padding: 2rem; color: #8b949e; font-size: 0.85rem; }
-a { color: #58a6ff; text-decoration: none; }
-a:hover { text-decoration: underline; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futures Signals Dashboard | MOEX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; }
+        .header { background: #161b22; border-bottom: 1px solid #30363d; padding: 1rem 2rem; }
+        .header h1 { font-size: 1.5rem; color: #58a6ff; }
+        .delay-notice { background: #ffd60a; color: #000; padding: 0.75rem 2rem; text-align: center; font-weight: 500; }
+        .container { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 1.5rem; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .ticker { font-size: 1.25rem; font-weight: 700; color: #58a6ff; }
+        .price { font-size: 2rem; font-weight: 700; margin: 0.5rem 0; }
+        .price.up { color: #3fb950; }
+        .price.down { color: #f85149; }
+        .signal { display: inline-flex; align-items: center; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 1.1rem; }
+        .signal.long { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
+        .signal.short { background: rgba(248, 81, 73, 0.15); color: #f85149; }
+        .signal.hold { background: rgba(255, 214, 10, 0.15); color: #ffd60a; }
+        .confidence-bar { height: 8px; background: #30363d; border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
+        .confidence-fill { height: 100%; background: linear-gradient(90deg, #3fb950, #58a6ff); }
+        .params { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; margin-top: 1rem; }
+        .param-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #21262d; }
+        .param-row:last-child { border-bottom: none; }
+        .param-label { color: #8b949e; }
+        .param-value { font-weight: 600; }
+        .reasoning { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem; margin-top: 1rem; }
+        .reasoning-title { color: #8b949e; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .reasoning-text { color: #c9d1d9; line-height: 1.5; }
+        .footer { text-align: center; padding: 2rem; color: #8b949e; font-size: 0.85rem; }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-<div class="header">
-<h1>📈 Futures Signals Dashboard</h1>
-</div>
-<div class="delay-notice">
-⏰ Данные с задержкой 15 минут | Последнее обновление: <span id="lastUpdate">загрузка...</span>
-</div>
-<div class="container">
-<div class="grid" id="signalsGrid">
-<!-- Карточки инструментов будут загружены через JS -->
-</div>
-</div>
-<div class="footer">
-<p>Данные предоставлены <a href="https://www.moex.com" target="_blank">Московской биржей</a> (15 мин задержка)</p>
-<p>⚠️ Не является инвестиционной рекомендацией. Торговля сопряжена с риском.</p>
-</div>
-<script>
-const SIGNALS_URL = 'signals.json';
+    <div class="header">
+        <h1>📈 Futures Signals Dashboard</h1>
+    </div>
+    <div class="delay-notice">
+        ⏰ Данные с задержкой 15 минут | Последнее обновление: <span id="lastUpdate">загрузка...</span>
+    </div>
+    <div class="container">
+        <div class="grid" id="signalsGrid">
+            <!-- Карточки инструментов будут загружены через JS -->
+        </div>
+    </div>
+    <div class="footer">
+        <p>Данные предоставлены <a href="https://www.moex.com" target="_blank">Московской биржей</a> (15 мин задержка)</p>
+        <p>⚠️ Не является инвестиционной рекомендацией. Торговля сопряжена с риском.</p>
+    </div>
+    <script>
+        const SIGNALS_URL = 'signals.json';
 
-async function loadSignals() {
-try {
-const response = await fetch(SIGNALS_URL);
-const data = await response.json();
-document.getElementById('lastUpdate').textContent = data.timestamp;
-const grid = document.getElementById('signalsGrid');
-grid.innerHTML = '';
-data.signals.forEach(signal => {
-const card = createSignalCard(signal);
-grid.appendChild(card);
-});
-} catch (error) {
-console.error('Ошибка загрузки сигналов:', error);
-}
-}
+        async function loadSignals() {
+            try {
+                const response = await fetch(SIGNALS_URL);
+                const data = await response.json();
+                
+                // Update timestamp
+                const timestamp = data.generated_at || data.timestamp || 'N/A';
+                document.getElementById('lastUpdate').textContent = new Date(timestamp).toLocaleString('ru-RU');
+                
+                const grid = document.getElementById('signalsGrid');
+                grid.innerHTML = '';
+                
+                data.signals.forEach(signal => {
+                    const card = createSignalCard(signal);
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки сигналов:', error);
+            }
+        }
 
-function createSignalCard(signal) {
-const card = document.createElement('div');
-card.className = 'card';
-const priceClass = signal.change >= 0 ? 'up' : 'down';
-const changeClass = signal.change >= 0 ? 'up' : 'down';
-const signalClass = signal.direction.toLowerCase();
-const signalIcon = signal.direction === 'LONG' ? '🟢' : signal.direction === 'SHORT' ? '🔴' : '🟡';
+        function createSignalCard(signal) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const signalType = (signal.signal || 'HOLD').toLowerCase();
+            const currentPrice = signal.current_price || signal.price || 'N/A';
+            const rsi = signal.rsi || 'N/A';
+            const reasoning = signal.reasoning || 'Анализ в процессе';
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="ticker">${signal.ticker}</div>
+                    <div class="signal ${signalType}">${signal.signal || 'HOLD'}</div>
+                </div>
+                <div class="price">${currentPrice}</div>
+                <div style="color: #8b949e; font-size: 0.9rem; margin-bottom: 1rem;">${signal.name}</div>
+                
+                <div style="margin: 1rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: #8b949e;">Уверенность</span>
+                        <span style="font-weight: 600;">${signal.confidence || 0}%</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${signal.confidence || 0}%"></div>
+                    </div>
+                </div>
+                
+                <div class="reasoning">
+                    <div class="reasoning-title">Обоснование сигнала:</div>
+                    <div class="reasoning-text">${reasoning}</div>
+                </div>
+                
+                <div class="params">
+                    <div class="param-row">
+                        <span class="param-label">Вход</span>
+                        <span class="param-value">${signal.entry_range || 'N/A'}</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">Stop-Loss</span>
+                        <span class="param-value">${signal.stop_loss || 'N/A'}</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">TP1</span>
+                        <span class="param-value">${signal.tp1 || 'N/A'}</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">TP2</span>
+                        <span class="param-value">${signal.tp2 || 'N/A'}</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">Риск/Прибыль</span>
+                        <span class="param-value">${signal.risk_reward || 'N/A'}</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">RSI</span>
+                        <span class="param-value">${rsi}</span>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
 
-card.innerHTML = `
-<div class="card-header">
-<div class="ticker">${signal.ticker}</div>
-<div class="signal ${signalClass}">${signalIcon} ${signal.direction}</div>
-</div>
-<div class="price ${priceClass}">${signal.price.toFixed(2)}</div>
-<div class="change ${changeClass}">${signal.change >= 0 ? '+' : ''}${signal.change.toFixed(2)} (${signal.changePercent >= 0 ? '+' : ''}${signal.changePercent.toFixed(2)}%)</div>
-<div style="margin-top: 1rem;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-<span style="color: #8b949e; font-size: 0.85rem;">Уверенность</span>
-<span style="font-weight: 600;">${signal.confidence}%</span>
-</div>
-<div class="confidence-bar">
-<div class="confidence-fill" style="width: ${signal.confidence}%;"></div>
-</div>
-</div>
-<div class="params">
-<div class="param-row">
-<span class="param-label">Вход</span>
-<span class="param-value">${signal.entry_min} - ${signal.entry_max}</span>
-</div>
-<div class="param-row">
-<span class="param-label">Стоп-лосс</span>
-<span class="param-value">${signal.stop_loss}</span>
-</div>
-<div class="param-row">
-<span class="param-label">TP1</span>
-<span class="param-value">${signal.tp1} (${signal.rr_tp1})</span>
-</div>
-<div class="param-row">
-<span class="param-label">TP2</span>
-<span class="param-value">${signal.tp2} (${signal.rr_tp2})</span>
-</div>
-<div class="param-row">
-<span class="param-label">Вероятность</span>
-<span class="param-value">${signal.probability}</span>
-</div>
-</div>
-`;
-return card;
-}
-
-loadSignals();
-setInterval(loadSignals, 600000);
-</script>
+        // Load signals on page load
+        loadSignals();
+        
+        // Auto-refresh every 5 minutes
+        setInterval(loadSignals, 5 * 60 * 1000);
+    </script>
 </body>
 </html>
