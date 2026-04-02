@@ -165,7 +165,7 @@ def generate_signal(ticker, secid, price):
         "probability": f"{prob_min}-{prob_max}%",
         "reasoning": {
             "RSI-14": f"{rsi:.0f}",
-            "Technical analysis based on MOEX data"
+            "analysis": "Technical analysis based on MOEX data"
         }
     }
 
