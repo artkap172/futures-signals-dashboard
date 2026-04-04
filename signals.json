@@ -4,16 +4,16 @@
       "ticker": "BR-5.26",
       "name": "Нефть Brent",
       "signal": "LONG",
-      "entry_range": "113.85 - 114.31",
-      "stop_loss": 107.62,
-      "tp1": 120.54,
-      "tp2": 126.99,
+      "entry_range": "113.9 - 114.36",
+      "stop_loss": 107.66,
+      "tp1": 120.6,
+      "tp2": 127.06,
       "risk_reward": "1:2",
       "confidence": 75,
       "reasoning": "RSI=59.9 (перепродан), SMA5>103, MACD бычий — потенциальный рост",
-      "current_price": 114.08,
+      "current_price": 114.13,
       "rsi": 59.9,
-      "timestamp": "2026-04-04T17:57:44.759233+03:00"
+      "timestamp": "2026-04-04T18:29:48.330025+03:00"
     },
     {
       "ticker": "NG-5.26",
@@ -25,40 +25,40 @@
       "tp2": 2.81,
       "risk_reward": "1:2",
       "confidence": 75,
-      "reasoning": "RSI=35.8 (перекуплен), SMA5<3, MACD медвежий — потенциальная коррекция",
-      "current_price": 3.05,
-      "rsi": 35.8,
-      "timestamp": "2026-04-04T17:57:46.711105+03:00"
+      "reasoning": "RSI=35.5 (перекуплен), SMA5<3, MACD медвежий — потенциальная коррекция",
+      "current_price": 3.04,
+      "rsi": 35.5,
+      "timestamp": "2026-04-04T18:29:50.541569+03:00"
     },
     {
       "ticker": "GOLD-6.26",
       "name": "Золото",
       "signal": "SHORT",
-      "entry_range": "4664.75 - 4683.45",
-      "stop_loss": 4830.24,
-      "tp1": 4517.96,
-      "tp2": 4361.81,
+      "entry_range": "4664.95 - 4683.65",
+      "stop_loss": 4830.3,
+      "tp1": 4518.3,
+      "tp2": 4362.3,
       "risk_reward": "1:2",
       "confidence": 75,
       "reasoning": "RSI=36.7 (перекуплен), SMA5<4783, MACD медвежий — потенциальная коррекция",
-      "current_price": 4674.1,
+      "current_price": 4674.3,
       "rsi": 36.7,
-      "timestamp": "2026-04-04T17:57:48.859369+03:00"
+      "timestamp": "2026-04-04T18:29:52.445986+03:00"
     },
     {
       "ticker": "SILV-6.26",
       "name": "Серебро",
       "signal": "SHORT",
-      "entry_range": "73.87 - 74.17",
-      "stop_loss": 77.01,
-      "tp1": 71.03,
-      "tp2": 68.03,
+      "entry_range": "73.93 - 74.23",
+      "stop_loss": 77.08,
+      "tp1": 71.08,
+      "tp2": 68.08,
       "risk_reward": "1:2",
       "confidence": 75,
-      "reasoning": "RSI=38.1 (перекуплен), SMA5<77, MACD медвежий — потенциальная коррекция",
-      "current_price": 74.02,
-      "rsi": 38.1,
-      "timestamp": "2026-04-04T17:57:51.477498+03:00"
+      "reasoning": "RSI=38.2 (перекуплен), SMA5<77, MACD медвежий — потенциальная коррекция",
+      "current_price": 74.08,
+      "rsi": 38.2,
+      "timestamp": "2026-04-04T18:29:54.586656+03:00"
     },
     {
       "ticker": "Si-6.26",
@@ -73,24 +73,24 @@
       "reasoning": "RSI=35.2 (перепродан), SMA5>81268, MACD бычий — потенциальный рост",
       "current_price": 79972,
       "rsi": 35.2,
-      "timestamp": "2026-04-04T17:57:53.209391+03:00"
+      "timestamp": "2026-04-04T18:29:56.791002+03:00"
     },
     {
       "ticker": "MX-6.26",
       "name": "Индекс МосБиржи",
       "signal": "SHORT",
-      "entry_range": "280462.95 - 281587.05",
-      "stop_loss": 284142.86,
-      "tp1": 277907.14,
-      "tp2": 274789.29,
+      "entry_range": "280562.75 - 281687.25",
+      "stop_loss": 284250.0,
+      "tp1": 278000.0,
+      "tp2": 274875.0,
       "risk_reward": "1:2",
       "confidence": 75,
-      "reasoning": "RSI=15.1 (перекуплен), SMA5<288965, MACD медвежий — потенциальная коррекция",
-      "current_price": 281025,
-      "rsi": 15.1,
-      "timestamp": "2026-04-04T17:57:55.392879+03:00"
+      "reasoning": "RSI=15.4 (перекуплен), SMA5<288968, MACD медвежий — потенциальная коррекция",
+      "current_price": 281125,
+      "rsi": 15.4,
+      "timestamp": "2026-04-04T18:29:58.703205+03:00"
     }
   ],
-  "generated_at": "2026-04-04T17:57:55.893481+03:00",
+  "generated_at": "2026-04-04T18:29:59.203805+03:00",
   "status": "success"
 }
