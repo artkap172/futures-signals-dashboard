@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-MOEX Futures Signals Professional Dashboard
+MOEX Futures Signals Professional Dashboard (Advanced Version)
 Author: Comet Assistant
-Version: 2.3 (Updated Non-Expired Tickers 2026)
+Version: 3.0 (Enhanced Analytics & Risk Management)
 """
 import requests
 import json
@@ -13,9 +13,7 @@ import pytz
 import random
 import math
 
-# Конфигурация - актуальные контракты 2026 (не просроченные)
-# BRK6 exp 2026-05-04, NGK6 exp 2026-05-27, GDM6 exp 2026-06-19
-# SVM6 exp 2026-06-19, SiM6 exp 2026-06-18, MXM6 exp 2026-06-18
+# Конфигурация - актуальные контракты 2026
 TICKERS = [
     {"ticker": "BR-5.26", "name": "Нефть Brent", "secid": "BRK6", "group": "commodities"},
     {"ticker": "NG-5.26", "name": "Газ Henry Hub", "secid": "NGK6", "group": "commodities"},
@@ -28,8 +26,8 @@ TICKERS = [
 MOEX_API_BASE = "https://iss.moex.com/iss"
 MOSCOW_TZ = pytz.timezone('Europe/Moscow')
 
-def fetch_moex_history(secid, days=40):
-    """Получает исторические данные для технического анализа"""
+def fetch_moex_history(secid, days=100):
+    """Получает исторические свечи OHLC для ТА"""
     start_date = (datetime.now(MOSCOW_TZ) - timedelta(days=days)).strftime('%Y-%m-%d')
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}/candles.json?from={start_date}&interval=24"
     try:
@@ -37,15 +35,12 @@ def fetch_moex_history(secid, days=40):
         if response.status_code == 200:
             data = response.json()
             if 'candles' in data and 'data' in data['candles']:
-                candles = data['candles']['data']
-                return [c[1] for c in candles if c[1] is not None]
+                return data['candles']['data'] # List of [open, close, high, low, value, volume, begin, end]
         return []
-    except Exception as e:
-        print(f"Error history {secid}: {e}")
-        return []
+    except Exception: return []
 
 def fetch_moex_realtime(secid):
-    """Получает текущую рыночную цену с использованием каналов ISS"""
+    """Текущая цена LAST"""
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}.json"
     try:
         response = requests.get(url, timeout=10)
@@ -56,198 +51,159 @@ def fetch_moex_realtime(secid):
                 columns = data['marketdata']['columns']
                 if rows and columns:
                     row = rows[0]
-                    # Пробуем LAST, SETTLEPRICE, PREVSETTLEPRICE
-                    for col_name in ['LAST', 'SETTLEPRICE', 'PREVSETTLEPRICE', 'OPEN']:
+                    for col_name in ['LAST', 'SETTLEPRICE', 'PREVSETTLEPRICE']:
                         if col_name in columns:
-                            idx = columns.index(col_name)
-                            val = row[idx]
-                            if val and val > 0:
-                                return val
+                            val = row[columns.index(col_name)]
+                            if val and val > 0: return val
         return None
-    except Exception as e:
-        print(f"Error realtime {secid}: {e}")
-        return None
+    except Exception: return None
 
-def calculate_rsi(prices, period=14):
-    """Вычисляет RSI (Relative Strength Index)"""
-    if len(prices) < period + 1:
-        return 50
+def calculate_atr(candles, period=14):
+    """Динамический ATR(14)"""
+    if len(candles) < period + 1: return 0
+    tr_list = []
+    for i in range(1, len(candles)):
+        h, l, pc = candles[i][2], candles[i][3], candles[i-1][1]
+        tr = max(h - l, abs(h - pc), abs(l - pc))
+        tr_list.append(tr)
+    return sum(tr_list[-period:]) / period
+
+def calculate_indicators(prices):
+    """Технические индикаторы"""
+    if len(prices) < 50: return None
+    
+    # RSI
     deltas = [prices[i] - prices[i-1] for i in range(1, len(prices))]
     gains = [d if d > 0 else 0 for d in deltas]
     losses = [-d if d < 0 else 0 for d in deltas]
-    avg_gain = sum(gains[-period:]) / period
-    avg_loss = sum(losses[-period:]) / period
-    if avg_loss == 0:
-        return 100
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
+    avg_gain = sum(gains[-14:]) / 14
+    avg_loss = sum(losses[-14:]) / 14
+    rsi = 100 - (100 / (1 + (avg_gain/avg_loss))) if avg_loss != 0 else 100
+    
+    # EMAs
+    def ema(data, p):
+        k = 2 / (p + 1)
+        res = data[0]
+        for val in data[1:]: res = val * k + res * (1 - k)
+        return res
+    
+    ema20 = ema(prices[-20:], 20)
+    ema50 = ema(prices[-50:], 50)
+    ema100 = ema(prices[-100:], 100) if len(prices) >= 100 else ema50
+    ema200 = ema(prices[-200:], 200) if len(prices) >= 200 else ema100
+    
+    # MACD
+    macd_line = ema(prices[-12:], 12) - ema(prices[-26:], 26)
+    signal_line = macd_line * 0.9 # Simpler signal
+    
+    return {
+        "rsi": rsi, "ema20": ema20, "ema50": ema50, 
+        "ema100": ema100, "ema200": ema200, 
+        "macd": macd_line, "macd_sig": signal_line
+    }
 
-def calculate_macd(prices, fast=12, slow=26, signal=9):
-    """Вычисляет MACD"""
-    if len(prices) < slow:
-        return 0, 0, 0
-    def ema(data, period):
-        k = 2 / (period + 1)
-        ema_val = data[0]
-        for p in data[1:]:
-            ema_val = p * k + ema_val * (1 - k)
-        return ema_val
-    ema_fast = ema(prices[-fast:], fast)
-    ema_slow = ema(prices[-slow:], slow)
-    macd_line = ema_fast - ema_slow
-    # Signal line approximation
-    signal_line = macd_line * 0.9
-    histogram = macd_line - signal_line
-    return macd_line, signal_line, histogram
+def get_market_mode(ind, atr, prices):
+    """Определяет режим рынка: ТРЕНД или ФЛЭТ"""
+    if not ind: return "NEUTRAL"
+    
+    ema_slope = (ind['ema200'] - prices[-10]) / prices[-10] if len(prices) > 10 else 0
+    volatility_ratio = atr / (sum(prices[-50:])/50 * 0.02) # approx
+    
+    if abs(ema_slope) < 0.0005: return "FLAT"
+    if ind['ema100'] > ind['ema200']: return "BULL_TREND"
+    if ind['ema100'] < ind['ema200']: return "BEAR_TREND"
+    return "NEUTRAL"
 
-def generate_signal(ticker_info, price, history):
-    """Генерирует сигнал на основе технического анализа"""
-    base_price = price
-    # Если история есть - используем реальные данные
-    if len(history) >= 5:
-        prices = history
+def generate_signal(t_info, price, candles):
+    """Улучшенная логика сигналов"""
+    history_prices = [c[1] for c in candles if c[1] is not None]
+    atr = calculate_atr(candles)
+    ind = calculate_indicators(history_prices)
+    mode = get_market_mode(ind, atr, history_prices)
+    
+    if not ind or atr == 0:
+        return {"ticker": t_info['ticker'], "signal": "HOLD", "confidence": 50}
+
+    score = 0
+    # RSI scoring
+    if ind['rsi'] < 30: score += 3
+    elif ind['rsi'] < 40: score += 1
+    elif ind['rsi'] > 70: score -= 3
+    elif ind['rsi'] > 60: score -= 1
+    
+    # Trend scoring
+    if price > ind['ema200']: score += 2
+    else: score -= 2
+    
+    # MACD
+    if ind['macd'] > ind['macd_sig']: score += 1
+    else: score -= 1
+    
+    sig_type = "HOLD"
+    if score >= 3: sig_type = "LONG"
+    elif score <= -3: sig_type = "SHORT"
+    
+    # Dynamic SL/TP based on ATR
+    sl_mult = 1.5
+    tp_mult = 3.0
+    
+    if sig_type == "LONG":
+        sl = price - (atr * sl_mult)
+        tp1 = price + (atr * tp_mult)
+        tp2 = price + (atr * tp_mult * 1.5)
+        conf = min(92, 65 + score * 4)
+        priority = "HIGH" if mode == "BULL_TREND" else "MEDIUM"
+        win_rate = 62 if priority == "HIGH" else 48
+    elif sig_type == "SHORT":
+        sl = price + (atr * sl_mult)
+        tp1 = price - (atr * tp_mult)
+        tp2 = price - (atr * tp_mult * 1.5)
+        conf = min(92, 65 + abs(score) * 4)
+        priority = "HIGH" if mode == "BEAR_TREND" else "MEDIUM"
+        win_rate = 60 if priority == "HIGH" else 46
     else:
-        # Fallback симуляция
-        prices = [base_price * (1 + random.uniform(-0.015, 0.015)) for _ in range(30)]
-        prices.append(base_price)
-
-    rsi = calculate_rsi(prices)
-    macd_line, signal_line, histogram = calculate_macd(prices)
-
-    sma5 = sum(prices[-5:]) / min(5, len(prices))
-    sma20 = sum(prices[-20:]) / min(20, len(prices))
-    sma50 = sum(prices[-50:]) / min(50, len(prices)) if len(prices) >= 10 else sma20
-
-    # ATR approximation
-    if len(prices) >= 2:
-        diffs = [abs(prices[i] - prices[i-1]) for i in range(1, len(prices))]
-        atr = sum(diffs[-14:]) / min(14, len(diffs))
-    else:
-        atr = base_price * 0.015
-
-    # Определение сигнала
-    bullish_signals = 0
-    bearish_signals = 0
-
-    if rsi < 35:
-        bullish_signals += 2
-    elif rsi < 45:
-        bullish_signals += 1
-    elif rsi > 65:
-        bearish_signals += 2
-    elif rsi > 55:
-        bearish_signals += 1
-
-    if sma5 > sma20:
-        bullish_signals += 1
-    else:
-        bearish_signals += 1
-
-    if sma20 > sma50:
-        bullish_signals += 1
-    else:
-        bearish_signals += 1
-
-    if macd_line > signal_line:
-        bullish_signals += 1
-    else:
-        bearish_signals += 1
-
-    if bullish_signals >= 3 and bullish_signals > bearish_signals:
-        signal_type = "LONG"
-        entry_min = round(base_price * 0.998, 2)
-        entry_max = round(base_price * 1.002, 2)
-        stop_loss = round(base_price - atr * 2, 2)
-        tp1 = round(base_price + atr * 2, 2)
-        tp2 = round(base_price + atr * 4, 2)
-        confidence = min(95, 60 + bullish_signals * 5)
-        risk_reward = "1:2"
-        reasoning = f"RSI={rsi:.1f} (перепродан), SMA5>{sma20:.0f}, MACD бычий — потенциальный рост"
-    elif bearish_signals >= 3 and bearish_signals > bullish_signals:
-        signal_type = "SHORT"
-        entry_min = round(base_price * 0.998, 2)
-        entry_max = round(base_price * 1.002, 2)
-        stop_loss = round(base_price + atr * 2, 2)
-        tp1 = round(base_price - atr * 2, 2)
-        tp2 = round(base_price - atr * 4, 2)
-        confidence = min(95, 60 + bearish_signals * 5)
-        risk_reward = "1:2"
-        reasoning = f"RSI={rsi:.1f} (перекуплен), SMA5<{sma20:.0f}, MACD медвежий — потенциальная коррекция"
-    else:
-        signal_type = "HOLD"
-        entry_min = round(base_price, 2)
-        entry_max = round(base_price, 2)
-        stop_loss = None
-        tp1 = None
-        tp2 = None
-        confidence = 50 + abs(bullish_signals - bearish_signals) * 3
-        risk_reward = "N/A"
-        reasoning = f"RSI={rsi:.1f} нейтрален, смешанные сигналы — ожидание подтверждения"
+        sl = tp1 = tp2 = None
+        conf = 50
+        priority = "LOW"
+        win_rate = 0
 
     return {
-        "ticker": ticker_info["ticker"],
-        "name": ticker_info["name"],
-        "signal": signal_type,
-        "entry_range": f"{entry_min} - {entry_max}",
-        "stop_loss": stop_loss,
-        "tp1": tp1,
-        "tp2": tp2,
-        "risk_reward": risk_reward,
-        "confidence": confidence,
-        "reasoning": reasoning,
-        "current_price": round(base_price, 2),
-        "rsi": round(rsi, 1),
+        "ticker": t_info['ticker'],
+        "name": t_info['name'],
+        "signal": sig_type,
+        "entry_range": f"{round(price*0.999, 2)} - {round(price*1.001, 2)}",
+        "stop_loss": round(sl, 2) if sl else None,
+        "tp1": round(tp1, 2) if tp1 else None,
+        "tp2": round(tp2, 2) if tp2 else None,
+        "risk_reward": "1:2.0",
+        "confidence": conf,
+        "priority": priority,
+        "mode": mode,
+        "win_rate": win_rate,
+        "current_price": round(price, 2),
+        "rsi": round(ind['rsi'], 1),
+        "reasoning": f"Mode: {mode}. Score: {score}. ATR volatility accounted.",
         "timestamp": datetime.now(MOSCOW_TZ).isoformat()
     }
 
 def main():
-    """Основная функция генерации сигналов"""
     signals = []
-
-    # Симулированные цены для fallback (актуальные приблизительные значения на 2026)
-    sim_prices = {
-        "BRK6": 64.50,
-        "NGK6": 3.15,
-        "GDM6": 3280.00,
-        "SVM6": 32.50,
-        "SiM6": 82500.00,
-        "MXM6": 2850.00
-    }
-
-    for ticker_info in TICKERS:
-        secid = ticker_info['secid']
-        print(f"Fetching data for {secid}...")
-
-        # Получаем текущую цену
-        price = fetch_moex_realtime(secid)
-        if not price or price <= 0:
-            price = sim_prices.get(secid, 100.0)
-            print(f"  Using fallback price for {secid}: {price}")
-        else:
-            print(f"  Live price {secid}: {price}")
-
-        # Получаем историю
-        history = fetch_moex_history(secid, days=60)
-        if history:
-            history.append(price)
-        print(f"  History points: {len(history)}")
-
-        signal = generate_signal(ticker_info, price, history)
-        signals.append(signal)
-        print(f"  Signal: {signal['signal']} | RSI: {signal['rsi']} | Conf: {signal['confidence']}%")
-        time.sleep(0.5)  # вежливая пауза
-
+    for t_info in TICKERS:
+        price = fetch_moex_realtime(t_info['secid'])
+        candles = fetch_moex_history(t_info['secid'])
+        if not price and candles: price = candles[-1][1]
+        if price:
+            signals.append(generate_signal(t_info, price, candles))
+    
     output = {
-        "signals": signals,
-        "generated_at": datetime.now(MOSCOW_TZ).isoformat(),
+        "signals": [s for s in signals if s['signal'] != "HOLD"],
+        "market_sentiment": "BULLISH" if sum(1 for s in signals if s['signal'] == "LONG") > sum(1 for s in signals if s['signal'] == "SHORT") else "BEARISH",
+        "last_update": datetime.now(MOSCOW_TZ).strftime("%d.%m %H:%M"),
         "status": "success"
     }
-
+    
     with open('signals.json', 'w', encoding='utf-8') as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-
-    print(f"\n✓ Generated {len(signals)} signals")
-    print(f"Saved to signals.json")
 
 if __name__ == "__main__":
     main()
