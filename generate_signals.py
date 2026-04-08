@@ -139,7 +139,8 @@ def analyze(df, price):
         bbu_col = 'BBU_20_2.0'
         bbl = last.get(bbl_col, None)
         bbu = last.get(bbu_col, None)
-        if bbl is not None and bbu is not None and not (pd.isna(bbl) or pd.isna(bbu)):
+        if bbl is not None and bbu is not None and not (pd.isna(bbl) or pd.isna(bbu)):208
+            
             if price < bbl:
                 score += 1.5
             elif price > bbu:
@@ -189,7 +190,8 @@ def analyze(df, price):
         print(f"analyze error: {e}")
         return None
 
-def main():
+205
+:
     res_all = []
     for code, info in ASSET_CONFIG.items():
         print(f"Processing {code}...")
