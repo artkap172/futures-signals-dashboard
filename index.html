@@ -1,140 +1,69 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOEX Futures Signals | Advanced Analytics</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.6; }
-        .header { background: #161b22; border-bottom: 1px solid #30363d; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 1rem; }
-        .header h1 { font-size: 1.5rem; color: #58a6ff; display: flex; align-items: center; gap: 10px; }
-        .market-status { background: #21262d; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; border: 1px solid #30363d; font-weight: bold; }
-        .container { max-width: 1400px; margin: 1.5rem auto; padding: 0 1rem; }
-        
-        .heatmap-section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1rem; margin-bottom: 2rem; display: flex; gap: 1rem; overflow-x: auto; scrollbar-width: thin; }
-        .heatmap-item { min-width: 140px; padding: 12px; border-radius: 8px; background: #21262d; border: 1px solid #30363d; text-align: center; }
-        .h-ticker { font-weight: bold; font-size: 0.85rem; color: #8b949e; margin-bottom: 4px; }
-        .h-change { font-size: 1.2rem; font-weight: 800; }
-        .up { color: #3fb950; }
-        .down { color: #f85149; }
-        .neutral { color: #8b949e; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; position: relative; transition: border-color 0.2s, transform 0.2s; }
-        .card:hover { border-color: #58a6ff; transform: translateY(-2px); }
-        
-        .priority-tag { position: absolute; top: 12px; left: 12px; font-size: 0.6rem; font-weight: bold; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
-        .priority-HIGH { background: rgba(88, 166, 255, 0.2); color: #58a6ff; border: 1px solid #58a6ff; }
-        .priority-MEDIUM { background: rgba(210, 153, 34, 0.2); color: #d29922; border: 1px solid #d29922; }
-        
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px; margin-bottom: 1rem; }
-        .ticker { font-size: 1.5rem; font-weight: 800; color: #f0f6fc; }
-        .name { font-size: 0.8rem; color: #8b949e; }
-        
-        .signal-badge { padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; border: 1px solid transparent; }
-        .long { background: rgba(63, 185, 80, 0.15); color: #3fb950; border-color: #238636; }
-        .short { background: rgba(248, 81, 73, 0.15); color: #f85149; border-color: #da3633; }
-        
-        .price-section { margin: 0.5rem 0; }
-        .price { font-size: 2.5rem; font-weight: 700; font-family: 'SF Mono', monospace; color: #f0f6fc; }
-        .mode-info { font-size: 0.7rem; color: #8b949e; background: #0d1117; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .params { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1rem; }
-        .param-item { background: #21262d; padding: 0.8rem; border-radius: 8px; border: 1px solid #30363d; }
-        .p-label { font-size: 0.6rem; color: #8b949e; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 600; }
-        .p-value { font-size: 1rem; font-weight: 700; font-family: monospace; color: #f0f6fc; }
-        
-        .reasoning { background: #0d1117; padding: 1rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1.2rem; border-left: 4px solid #30363d; color: #8b949e; }
-        .empty-msg { grid-column: 1/-1; text-align: center; padding: 5rem 2rem; color: #8b949e; background: #161b22; border-radius: 12px; border: 1px dashed #30363d; }
-        
-        .footer { text-align: center; padding: 4rem 2rem; color: #8b949e; font-size: 0.8rem; border-top: 1px solid #30363d; margin-top: 4rem; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>📊 MOEX Radar v3.2</h1>
-        <div id="market-mode" class="market-status">ЗАГРУЗКА...</div>
-        <div class="update-time">
-            <span style="color: #8b949e; font-size: 0.7rem; text-transform: uppercase;">Обновлено:</span>
-            <span id="lastUpdate" style="font-weight: bold; color: #58a6ff; font-family: monospace;">--:--</span>
-        </div>
-    </div>
-
-    <div class="container">
-        <div id="heatmap" class="heatmap-section"></div>
-        <div id="signalsGrid" class="grid">
-            <div class="empty-msg">Поиск активных торговых сигналов...</div>
-        </div>
-    </div>
-
-    <div class="footer">
-        © 2026 Advanced Signals Dashboard. Динамический риск-менеджмент на базе ATR и анализ тренда.
-    </div>
-
-    <script>
-        async function updateDashboard() {
-            try {
-                const res = await fetch('signals.json?nocache=' + Date.now());
-                if (!res.ok) throw new Error("Ошибка загрузки данных");
-                const data = await res.json();
-                
-                document.getElementById('lastUpdate').textContent = data.last_update || "--:--";
-                const mMode = document.getElementById('market-mode');
-                mMode.textContent = "SENTIMENT: " + (data.market_sentiment || "NEUTRAL");
-                mMode.style.color = data.market_sentiment === 'BULLISH' ? '#3fb950' : '#f85149';
-
-                // Heatmap
-                const hSection = document.getElementById('heatmap');
-                if (data.heatmap) {
-                    hSection.innerHTML = data.heatmap.map(h => `
-                        <div class="heatmap-item">
-                            <div class="h-ticker">${h.ticker}</div>
-                            <div class="h-change ${h.change > 0 ? 'up' : (h.change < 0 ? 'down' : 'neutral')}">
-                                ${h.change > 0 ? '+' : ''}${h.change}%
-                            </div>
-                            <div style="font-size: 0.75rem; color: #f0f6fc; margin-top:4px; font-family: monospace;">${h.price.toLocaleString()}</div>
-                        </div>
-                    `).join('');
-                }
-
-                // Grid
-                const grid = document.getElementById('signalsGrid');
-                if (!data.signals || data.signals.length === 0) {
-                    grid.innerHTML = '<div class="empty-msg">На данный момент активных сигналов HIGH/MEDIUM приоритета не обнаружено. Ожидайте изменения рыночной конъюнктуры.</div>';
-                } else {
-                    grid.innerHTML = data.signals.map(sig => `
-                        <div class="card">
-                            <div class="priority-tag priority-${sig.priority}">${sig.priority} PRIORITY</div>
-                            <div class="card-header">
-                                <div>
-                                    <div class="ticker">${sig.ticker}</div>
-                                    <div class="name">${sig.name}</div>
-                                </div>
-                                <span class="signal-badge ${sig.signal.toLowerCase()}">${sig.signal}</span>
-                            </div>
-                            <div class="price-section">
-                                <div class="price">${sig.current_price.toLocaleString('ru-RU')}</div>
-                            </div>
-                            <div class="mode-info">${sig.mode.replace('_', ' ')} | WIN RATE: ${sig.win_rate}%</div>
-                            
-                            <div class="params">
-                                <div class="param-item"><span class="p-label">Вход</span><span class="p-value">${sig.entry_range}</span></div>
-                                <div class="param-item"><span class="p-label">Stop Loss</span><span class="p-value" style="color: #f85149">${sig.stop_loss}</span></div>
-                                <div class="param-item"><span class="p-label">Target 1</span><span class="p-value" style="color: #3fb950">${sig.tp1}</span></div>
-                                <div class="param-item"><span class="p-label">Target 2</span><span class="p-value" style="color: #3fb950">${sig.tp2}</span></div>
-                            </div>
-                            <div class="reasoning">${sig.reasoning}</div>
-                        </div>
-                    `).join('');
-                }
-            } catch (e) { 
-                console.error(e);
-                document.getElementById('signalsGrid').innerHTML = `<div class="empty-msg" style="color:#f85149">Ошибка: ${e.message}. Попробуйте обновить страницу позже.</div>`;
-            }
-        }
-        updateDashboard();
-        setInterval(updateDashboard, 60000);
-    </script>
-</body>
-</html>
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>MOEX PRO | Trading Signals</title><style>
+:root{--bg:#0b0e14;--surf:#151921;--brd:#2d333b;--txt:#adbac7;--head:#cdd9e5;--blue:#539bf5;--green:#57ab5a;--red:#f47067;--yel:#c69026}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5}
+.header{background:var(--surf);border-bottom:1px solid var(--brd);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{font-size:1.2rem;font-weight:800;color:var(--head)}
+.m-status{padding:4px 12px;border-radius:6px;font-size:0.7rem;border:1px solid var(--brd);font-weight:700}
+.container{max-width:1400px;margin:1.5rem auto;padding:0 1rem}
+.ticker-bar{display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;margin-bottom:2rem}
+.t-item{background:var(--surf);border:1px solid var(--brd);border-radius:8px;padding:0.75rem 1rem;min-width:140px;text-align:center}
+.t-name{font-size:0.6rem;color:#768390;text-transform:uppercase}
+.t-price{font-family:monospace;font-size:1rem;color:var(--head)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem}
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:1.5rem;position:relative}
+.badge-row{display:flex;justify-content:space-between;margin-bottom:1rem}
+.p-tag{font-size:0.6rem;font-weight:800;padding:2px 8px;border-radius:4px}
+.p-HIGH{background:rgba(83,155,245,0.1);color:var(--blue);border:1px solid var(--blue)}
+.sig-val{font-size:0.7rem;font-weight:800;padding:2px 10px;border-radius:10px}
+.LONG{background:var(--green);color:#fff}.SHORT{background:var(--red);color:#fff}
+.symbol{font-size:1.4rem;font-weight:800;color:var(--head)}
+.price-row{margin:1rem 0;font-size:2rem;font-weight:700;font-family:monospace}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
+.stat-box{background:#1c2128;padding:0.75rem;border-radius:8px;border:1px solid var(--brd)}
+.s-label{font-size:0.55rem;color:#768390;text-transform:uppercase;display:block}
+.s-value{font-size:0.9rem;font-weight:700;font-family:monospace}
+.reason{margin-top:1rem;padding:0.75rem;background:#0b0e14;border-radius:6px;font-size:0.75rem;color:#768390;border-left:3px solid var(--brd)}
+.up{color:var(--green)}.down{color:var(--red)}
+</style></head><body>
+<header class="header">
+<div class="logo">📊 MOEX PRO v5.0</div>
+<div id="sent" class="m-status">SENTIMENT: --</div>
+<div><div style="font-size:0.5rem;color:#768390">UPDATE</div><div id="time" style="font-weight:800;color:var(--blue)">--:--</div></div>
+</header>
+<div class="container">
+<div id="tickers" class="ticker-bar"></div>
+<div id="grid" class="grid"><div style="text-align:center;width:100%;grid-column:1/-1;padding:5rem">Loading...</div></div>
+</div>
+<script>
+async function upd(){
+try{
+const r=await fetch('signals.json?t='+Date.now());
+const d=await r.json();
+document.getElementById('time').textContent=d.last_update;
+const s=document.getElementById('sent');
+s.textContent="SENTIMENT: "+d.market_sentiment;
+s.style.color=d.market_sentiment==='BULLISH'? '#57ab5a':'#f47067';
+document.getElementById('tickers').innerHTML=d.heatmap.map(h=>`
+<div class="t-item"><div class="t-name">${h.ticker}</div><div class="t-price">${h.price}</div><div style="font-size:0.7rem" class="${h.change>=0?'up':'down'}">${h.change}%</div></div>
+`).join('');
+const g=document.getElementById('grid');
+if(!d.signals||d.signals.length===0){
+g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:5rem;border:1px dashed var(--brd);border-radius:12px">No active signals. Monitoring...</div>';
+}else{
+g.innerHTML=d.signals.map(s=>`
+<div class="card">
+<div class="badge-row"><span class="p-tag p-${s.priority}">${s.priority}</span><span class="sig-val ${s.signal}">${s.signal}</span></div>
+<div><div class="symbol">${s.ticker}</div><div style="font-size:0.7rem;color:#768390">${s.name}</div></div>
+<div class="price-row">${s.current_price}</div>
+<div class="stats">
+<div class="stat-box"><span class="s-label">Entry</span><span class="s-value">${s.entry_range}</span></div>
+<div class="stat-box"><span class="s-label">Stop Loss</span><span class="s-value" style="color:var(--red)">${s.stop_loss}</span></div>
+<div class="stat-box"><span class="s-label">Target 1</span><span class="s-value" style="color:var(--green)">${s.tp1}</span></div>
+<div class="stat-box"><span class="s-label">Target 2</span><span class="s-value" style="color:var(--green)">${s.tp2}</span></div>
+</div>
+<div class="reason">${s.reasoning}</div>
+</div>`).join('');
+}}catch(e){console.error(e)}}
+upd();setInterval(upd,30000);
+</script></body></html>
