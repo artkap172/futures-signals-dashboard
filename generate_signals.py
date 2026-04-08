@@ -143,7 +143,7 @@ def analyze(df, price):
             
             if price < bbl:
                 score += 1.5
-            elif price > bbu:
+            ce > bbu:
                 score -= 1.5
 
         # MACD
