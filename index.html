@@ -12,6 +12,14 @@
         .market-status { background: #21262d; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; border: 1px solid #30363d; }
         .container { max-width: 1400px; margin: 1.5rem auto; padding: 0 1rem; }
         
+        /* Heatmap Styling */
+        .heatmap-section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1rem; margin-bottom: 2rem; display: flex; gap: 1rem; overflow-x: auto; }
+        .heatmap-item { min-width: 150px; padding: 10px; border-radius: 8px; background: #21262d; border: 1px solid #30363d; text-align: center; }
+        .h-ticker { font-weight: bold; font-size: 0.9rem; }
+        .h-change { font-size: 1.1rem; font-weight: 800; }
+        .up { color: #3fb950; }
+        .down { color: #f85149; }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; }
         .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; position: relative; transition: border-color 0.2s; }
         .card:hover { border-color: #58a6ff; }
@@ -22,8 +30,6 @@
         
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 10px; margin-bottom: 1rem; }
         .ticker { font-size: 1.4rem; font-weight: 800; color: #f0f6fc; }
-        .name { font-size: 0.8rem; color: #8b949e; display: block; }
-        
         .signal-badge { padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; }
         .long { background: rgba(63, 185, 80, 0.15); color: #3fb950; border: 1px solid #238636; }
         .short { background: rgba(248, 81, 73, 0.15); color: #f85149; border: 1px solid #da3633; }
@@ -31,23 +37,19 @@
         .price { font-size: 2.4rem; font-weight: 700; font-family: 'SF Mono', monospace; margin: 0.5rem 0; }
         .mode-info { font-size: 0.75rem; color: #8b949e; background: #0d1117; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 1rem; }
         
-        .stats-row { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.8rem; color: #8b949e; }
-        .win-rate { color: #3fb950; font-weight: bold; }
-        
         .params { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
         .param-item { background: #21262d; padding: 0.7rem; border-radius: 8px; border: 1px solid #30363d; }
         .p-label { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; display: block; margin-bottom: 2px; }
         .p-value { font-size: 0.95rem; font-weight: 700; font-family: monospace; }
         
         .reasoning { background: #0d1117; padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem; border-left: 3px solid #30363d; }
-        
         .footer { text-align: center; padding: 3rem; color: #8b949e; font-size: 0.8rem; border-top: 1px solid #30363d; margin-top: 3rem; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📊 MOEX Futures Radar v3.0</h1>
-        <div id="market-mode" class="market-status">Ожидание данных...</div>
+        <h1>📊 MOEX Futures Radar v3.1</h1>
+        <div id="market-mode" class="market-status">Ожидание...</div>
         <div class="update-time">
             <span style="color: #8b949e; font-size: 0.7rem;">ОБНОВЛЕНО:</span>
             <span id="lastUpdate" style="font-weight: bold; color: #58a6ff;">--:--</span>
@@ -55,13 +57,18 @@
     </div>
 
     <div class="container">
+        <!-- Heatmap -->
+        <div id="heatmap" class="heatmap-section">
+            <!-- Heatmap items injected here -->
+        </div>
+
         <div id="signalsGrid" class="grid">
             <!-- Cards injected here -->
         </div>
     </div>
 
     <div class="footer">
-        © 2026 Advanced Signals Dashboard. ATR-Dynamic Risk Management & Market Mode Filters.
+        © 2026 Advanced Signals Dashboard. ATR-Dynamic Risk & Market Heatmap.
     </div>
 
     <script>
@@ -75,14 +82,22 @@
                 mMode.textContent = "SENTIMENT: " + data.market_sentiment;
                 mMode.style.color = data.market_sentiment === 'BULLISH' ? '#3fb950' : '#f85149';
 
+                // Render Heatmap
+                const hSection = document.getElementById('heatmap');
+                hSection.innerHTML = data.heatmap.map(h => `
+                    <div class="heatmap-item">
+                        <div class="h-ticker">${h.ticker}</div>
+                        <div class="h-change ${h.change >= 0 ? 'up' : 'down'}">${h.change > 0 ? '+' : ''}${h.change}%</div>
+                        <div style="font-size: 0.7rem; color: #8b949e;">${h.price}</div>
+                    </div>
+                `).join('');
+
                 const grid = document.getElementById('signalsGrid');
                 grid.innerHTML = '';
 
                 data.signals.forEach(sig => {
                     const card = document.createElement('div');
                     card.className = 'card';
-                    const sigLower = sig.signal.toLowerCase();
-                    
                     card.innerHTML = `
                         <div class="priority-tag priority-${sig.priority}">${sig.priority} PRIORITY</div>
                         <div class="card-header">
@@ -90,33 +105,16 @@
                                 <span class="ticker">${sig.ticker}</span>
                                 <span class="name">${sig.name}</span>
                             </div>
-                            <span class="signal-badge ${sigLower}">${sig.signal}</span>
+                            <span class="signal-badge ${sig.signal.toLowerCase()}">${sig.signal}</span>
                         </div>
                         <div class="price">${sig.current_price.toLocaleString('ru-RU')}</div>
                         <div class="mode-info">Market Mode: ${sig.mode.replace('_', ' ')}</div>
                         
-                        <div class="stats-row">
-                            <span>Confidence: <b>${sig.confidence}%</b></span>
-                            <span>Historical Win Rate: <span class="win-rate">${sig.win_rate}%</span></span>
-                        </div>
-
                         <div class="params">
-                            <div class="param-item">
-                                <span class="p-label">Entry Range</span>
-                                <span class="p-value">${sig.entry_range}</span>
-                            </div>
-                            <div class="param-item">
-                                <span class="p-label">Stop Loss (ATR)</span>
-                                <span class="p-value" style="color: #f85149">${sig.stop_loss}</span>
-                            </div>
-                            <div class="param-item">
-                                <span class="p-label">Take Profit 1</span>
-                                <span class="p-value" style="color: #3fb950">${sig.tp1}</span>
-                            </div>
-                            <div class="param-item">
-                                <span class="p-label">Take Profit 2</span>
-                                <span class="p-value" style="color: #3fb950">${sig.tp2}</span>
-                            </div>
+                            <div class="param-item"><span class="p-label">Entry Range</span><span class="p-value">${sig.entry_range}</span></div>
+                            <div class="param-item"><span class="p-label">Stop Loss</span><span class="p-value" style="color: #f85149">${sig.stop_loss}</span></div>
+                            <div class="param-item"><span class="p-label">TP 1</span><span class="p-value" style="color: #3fb950">${sig.tp1}</span></div>
+                            <div class="param-item"><span class="p-label">TP 2</span><span class="p-value" style="color: #3fb950">${sig.tp2}</span></div>
                         </div>
                         <div class="reasoning">${sig.reasoning}</div>
                     `;
