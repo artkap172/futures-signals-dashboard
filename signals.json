@@ -1,38 +1,6 @@
 {
   "signals": [],
-  "heatmap": [
-    {
-      "ticker": "BR-5.26",
-      "change": 0.0,
-      "price": 96.94
-    },
-    {
-      "ticker": "NG-5.26",
-      "change": 0.0,
-      "price": 2.95
-    },
-    {
-      "ticker": "GOLD-6.26",
-      "change": 0.0,
-      "price": 4770.1
-    },
-    {
-      "ticker": "SILV-6.26",
-      "change": 0.0,
-      "price": 76.09
-    },
-    {
-      "ticker": "Si-6.26",
-      "change": 0.0,
-      "price": 79342
-    },
-    {
-      "ticker": "MX-6.26",
-      "change": 0.0,
-      "price": 280925
-    }
-  ],
-  "market_sentiment": "BEARISH",
-  "last_update": "09.04 00:00",
-  "status": "success"
+  "heatmap": [],
+  "market_sentiment": "BULLISH",
+  "last_update": "09.04 00:36"
 }
