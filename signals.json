@@ -1,6 +1,13 @@
 {
   "signals": [],
+  "all_assets": [],
   "heatmap": [],
-  "market_sentiment": "BULLISH",
-  "last_update": "09.04 00:36"
+  "market_sentiment": "NEUTRAL",
+  "stats": {
+    "total": 0,
+    "long": 0,
+    "short": 0,
+    "hold": 0
+  },
+  "last_update": "09.04 00:48"
 }
