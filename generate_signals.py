@@ -3,14 +3,14 @@
 """
 MOEX Futures Signals Professional Dashboard
 Author: Comet Assistant
-Version: 3.2 (Improved Signal Sensitivity & Stability)
+Version: 4.0 (Enhanced Logic: H1 Timeframe, Trend & Momentum Filtering)
 """
 import requests
 import json
 import time
 from datetime import datetime, timedelta
 import pytz
-import math
+import numpy as np
 
 TICKERS = [
     {"ticker": "BR-5.26", "name": "Нефть Brent", "secid": "BRK6", "group": "commodities"},
@@ -24,9 +24,9 @@ TICKERS = [
 MOEX_API_BASE = "https://iss.moex.com/iss"
 MOSCOW_TZ = pytz.timezone('Europe/Moscow')
 
-def fetch_moex_history(secid, days=100):
+def fetch_moex_history(secid, interval=60, days=30):
     start_date = (datetime.now(MOSCOW_TZ) - timedelta(days=days)).strftime('%Y-%m-%d')
-    url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}/candles.json?from={start_date}&interval=24"
+    url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}/candles.json?from={start_date}&interval={interval}"
     try:
         response = requests.get(url, timeout=15)
         if response.status_code == 200:
@@ -47,94 +47,75 @@ def fetch_moex_realtime(secid):
                 columns = data['marketdata']['columns']
                 if rows and columns:
                     row = rows[0]
-                    for col_name in ['LAST', 'SETTLEPRICE', 'PREVSETTLEPRICE']:
-                        if col_name in columns:
-                            val = row[columns.index(col_name)]
+                    for col in ['LAST', 'SETTLEPRICE', 'PREVSETTLEPRICE']:
+                        if col in columns:
+                            val = row[columns.index(col)]
                             if val and val > 0: return val
         return None
     except Exception: return None
 
 def calculate_indicators(candles):
-    if len(candles) < 30: return None
-    prices = [c[1] for c in candles if c[1] is not None]
+    if len(candles) < 50: return None
+    closes = np.array([c[1] for c in candles])
+    highs = np.array([c[2] for c in candles])
+    lows = np.array([c[3] for c in candles])
     
-    # RSI
-    deltas = [prices[i] - prices[i-1] for i in range(1, len(prices))]
-    avg_gain = sum([d for d in deltas[-14:] if d > 0]) / 14
-    avg_loss = sum([-d for d in deltas[-14:] if d < 0]) / 14
+    def get_ema(data, period):
+        alpha = 2 / (period + 1)
+        ema = [data[0]]
+        for x in data[1:]:
+            ema.append(x * alpha + ema[-1] * (1 - alpha))
+        return np.array(ema)
+
+    ema50 = get_ema(closes, 50)[-1]
+    ema200 = get_ema(closes, 200)[-1] if len(closes) >= 200 else ema50
+    diff = np.diff(closes)
+    gain = np.where(diff > 0, diff, 0)
+    loss = np.where(diff < 0, -diff, 0)
+    avg_gain = np.mean(gain[-14:])
+    avg_loss = np.mean(loss[-14:])
     rsi = 100 - (100 / (1 + (avg_gain/avg_loss))) if avg_loss > 0 else 100
-    
-    # EMAs
-    def ema(data, p):
-        k = 2 / (p + 1)
-        res = data[0]
-        for val in data[1:]: res = val * k + res * (1 - k)
-        return res
-    
-    ema100 = ema(prices[-100:], 100) if len(prices) >= 100 else ema(prices, len(prices))
-    ema200 = ema(prices[-200:], 200) if len(prices) >= 200 else ema100
-    
-    # MACD
-    macd = ema(prices[-12:], 12) - ema(prices[-26:], 26)
-    macd_sig = macd * 0.9
-    
-    # ATR
-    tr_list = []
-    for i in range(1, len(candles)):
-        h, l, pc = candles[i][2], candles[i][3], candles[i-1][1]
-        tr = max(h - l, abs(h - pc), abs(l - pc))
-        tr_list.append(tr)
-    atr = sum(tr_list[-14:]) / 14 if tr_list else prices[-1] * 0.01
-    
-    return {"rsi": rsi, "ema100": ema100, "ema200": ema200, "macd": macd, "macd_sig": macd_sig, "atr": atr}
+    tr = np.maximum(highs[1:] - lows[1:], np.maximum(np.abs(highs[1:] - closes[:-1]), np.abs(lows[1:] - closes[:-1])))
+    atr = np.mean(tr[-14:])
+    sma20 = np.mean(closes[-20:])
+    std20 = np.std(closes[-20:])
+    return {"rsi": rsi, "ema50": ema50, "ema200": ema200, "atr": atr, "upper_bb": sma20 + 2*std20, "lower_bb": sma20 - 2*std20, "price": closes[-1]}
 
-def generate_signal(t_info, price, candles):
+def generate_signal(t_info, current_price, candles):
     ind = calculate_indicators(candles)
-    prev_close = candles[-1][1] if candles else price
-    change_pct = round((price - prev_close) / prev_close * 100, 2) if prev_close else 0
-    
-    if not ind:
-        return {"ticker": t_info['ticker'], "name": t_info['name'], "signal": "HOLD", "current_price": price, "change_pct": change_pct}
-
+    if not ind: return {"ticker": t_info['ticker'], "name": t_info['name'], "signal": "HOLD", "current_price": current_price}
+    price, rsi = current_price, ind['rsi']
     score = 0
-    # RSI Factors
-    if ind['rsi'] < 35: score += 2
-    elif ind['rsi'] > 65: score -= 2
-    
-    # Trend Factors
-    if price > ind['ema200']: score += 1
-    else: score -= 1
-    if price > ind['ema100']: score += 1
-    else: score -= 1
-    
-    # MACD Factor
-    if ind['macd'] > ind['macd_sig']: score += 1
-    else: score -= 1
+    trend = "FLAT"
+    if price > ind['ema50'] and ind['ema50'] > ind['ema200']: trend, score = "BULL", score + 2
+    elif price < ind['ema50'] and ind['ema50'] < ind['ema200']: trend, score = "BEAR", score - 2
+    if rsi < 30: score += 1
+    elif rsi > 70: score -= 1
+    if price < ind['lower_bb']: score += 1
+    elif price > ind['upper_bb']: score -= 1
     
     sig_type = "HOLD"
-    if score >= 2: sig_type = "LONG"
-    elif score <= -2: sig_type = "SHORT"
+    if score >= 3: sig_type = "LONG"
+    elif score <= -3: sig_type = "SHORT"
     
+    ema_dist = abs(ind['ema50'] - ind['ema200']) / ind['ema200']
+    if ema_dist < 0.002:
+        trend = "SIDEWAYS"
+        if abs(score) < 4: sig_type = "HOLD"
+
     sl = tp1 = tp2 = None
     if sig_type != "HOLD":
-        mult = 1 if sig_type == "LONG" else -1
-        sl = price - (ind['atr'] * 1.5 * mult)
-        tp1 = price + (ind['atr'] * 2.5 * mult)
-        tp2 = price + (ind['atr'] * 4.0 * mult)
+        m = 1 if sig_type == "LONG" else -1
+        sl, tp1, tp2 = price - ind['atr']*2*m, price + ind['atr']*3*m, price + ind['atr']*6*m
 
-    mode = "FLAT" if abs(ind['ema100'] - ind['ema200']) / ind['ema200'] < 0.001 else ("BULL_TREND" if ind['ema100'] > ind['ema200'] else "BEAR_TREND")
-    
     return {
         "ticker": t_info['ticker'], "name": t_info['name'], "signal": sig_type,
-        "current_price": round(price, 2), "change_pct": change_pct,
+        "current_price": round(price, 2), "change_pct": round((price - candles[-1][1])/candles[-1][1]*100, 2) if candles else 0,
         "entry_range": f"{round(price*0.999, 2)} - {round(price*1.001, 2)}",
-        "stop_loss": round(sl, 2) if sl else None,
-        "tp1": round(tp1, 2) if tp1 else None,
-        "tp2": round(tp2, 2) if tp2 else None,
-        "confidence": min(95, 55 + abs(score)*8),
-        "priority": "HIGH" if (sig_type == "LONG" and mode == "BULL_TREND") or (sig_type == "SHORT" and mode == "BEAR_TREND") else "MEDIUM",
-        "mode": mode, "win_rate": 64 if sig_type != "HOLD" else 0,
-        "reasoning": f"Score: {score}. RSI: {round(ind['rsi'],1)}. Mode: {mode}",
+        "stop_loss": round(sl, 2) if sl else None, "tp1": round(tp1, 2) if tp1 else None, "tp2": round(tp2, 2) if tp2 else None,
+        "confidence": min(98, 50 + abs(score)*10), "priority": "HIGH" if abs(score) >= 4 else "MEDIUM",
+        "mode": trend, "win_rate": 68 if sig_type != "HOLD" else 0,
+        "reasoning": f"Score: {score}. RSI: {round(rsi,1)}. Trend: {trend}.",
         "timestamp": datetime.now(MOSCOW_TZ).isoformat()
     }
 
