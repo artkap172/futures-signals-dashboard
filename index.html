@@ -15,7 +15,7 @@
         .logo { font-size: 1.3rem; font-weight: 900; color: var(--head); letter-spacing: -0.02em; }
         .m-status { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; border: 1px solid var(--brd); }
         .container { max-width: 1600px; margin: 2rem auto; padding: 0 1.5rem; }
-        
+
         .ticker-bar { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
         .t-item { background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; padding: 1rem; transition: all 0.3s; cursor: pointer; }
         .t-item:hover { border-color: var(--blue); transform: translateY(-2px); }
@@ -26,7 +26,7 @@
         .LONG { background: var(--green); color: #fff; }
         .SHORT { background: var(--red); color: #fff; }
         .HOLD { background: var(--brd); color: var(--txt); }
-        
+
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem; }
         .card { background: var(--surf); border: 1px solid var(--brd); border-radius: 14px; padding: 1.5rem; position: relative; transition: all 0.3s; display: flex; flex-direction: column; }
         .card.active-sig { border-color: var(--blue); border-width: 2px; box-shadow: 0 8px 24px rgba(83, 155, 245, 0.2); }
@@ -35,19 +35,21 @@
         .p-HIGH { background: rgba(83, 155, 245, 0.15); color: var(--blue); border: 1px solid var(--blue); }
         .p-MEDIUM { background: rgba(181, 131, 244, 0.15); color: var(--purple); border: 1px solid var(--purple); }
         .sig-val { font-size: 0.75rem; font-weight: 900; padding: 5px 12px; border-radius: 12px; }
-        
+
         .symbol { font-size: 1.5rem; font-weight: 900; color: var(--head); }
         .price-row { margin: 0.5rem 0; font-size: 2rem; font-weight: 900; font-family: monospace; color: var(--head); }
         .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin: 1rem 0; }
         .stat-box { background: #1c2128; padding: 0.7rem; border-radius: 8px; border: 1px solid var(--brd); }
         .s-label { font-size: 0.55rem; color: #768390; text-transform: uppercase; font-weight: 700; display: block; }
         .s-value { font-size: 0.9rem; font-weight: 800; font-family: monospace; margin-top: 0.2rem; }
+
+        .reasoning { font-size: 0.7rem; color: #768390; background: #1c2128; padding: 0.8rem; border-radius: 8px; margin: 0.5rem 0; border-left: 3px solid var(--blue); }
         
         .indicators { background: #1c2128; padding: 0.8rem; border-radius: 8px; margin-top: auto; font-size: 0.7rem; }
         .ind-row { display: flex; justify-content: space-between; padding: 0.2rem 0; }
         .ind-label { color: #768390; font-weight: 600; }
         .ind-value { color: var(--head); font-family: monospace; font-weight: 700; }
-        
+
         .up { color: var(--green); }
         .down { color: var(--red); }
         .empty-msg { grid-column: 1/-1; text-align: center; padding: 6rem; color: #768390; border: 1px dashed var(--brd); border-radius: 14px; }
@@ -55,7 +57,7 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo">📊 MOEX PRO v5.1</div>
+        <div class="logo">📊 MOEX PRO v5.2</div>
         <div id="sent" class="m-status">SENTIMENT: --</div>
         <div style="text-align: right">
             <div style="font-size: 0.55rem; color: #768390; font-weight: 700">LAST UPDATE</div>
@@ -65,9 +67,11 @@
 
     <div class="container">
         <div id="tickers" class="ticker-bar"></div>
-        <h2 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--head)">Monitoring & Signals</h2>
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--head); display: flex; align-items: center; gap: 0.5rem;">
+            🔍 Monitoring & Signals <span style="font-size: 0.7rem; color: #768390; font-weight: 400;">(Real-time MOEX Data)</span>
+        </h2>
         <div id="grid" class="grid">
-            <div class="empty-msg">Loading data...</div>
+            <div class="empty-msg">Loading data from signals.json...</div>
         </div>
     </div>
 
@@ -80,10 +84,10 @@
             if (rsi > 60) return '#ffab91';
             return '#c69026';
         }
-
         async function upd() {
             try {
                 const r = await fetch('signals.json?t=' + Date.now());
+                if (!r.ok) throw new Error('Network response was not ok');
                 const d = await r.json();
                 
                 document.getElementById('time').textContent = d.last_update;
@@ -109,7 +113,7 @@
                         </div>
                     `;
                 }).join('');
-                
+
                 // Render Grid (All Assets)
                 const all = d.all_assets || [];
                 const g = document.getElementById('grid');
@@ -118,9 +122,10 @@
                 } else {
                     g.innerHTML = all.map(sg => {
                         const ind = sg.indicators || {};
-                        const active = sg.signal !== 'HOLD' ? 'active-sig' : '';
+                        const isActive = sg.signal !== 'HOLD' || (sg.stop_loss !== null);
+                        const activeCls = isActive ? 'active-sig' : '';
                         return `
-                            <div class="card ${active}" id="card-${sg.ticker}">
+                            <div class="card ${activeCls}" id="card-${sg.ticker}">
                                 <div class="badge-row">
                                     <span class="p-tag p-${sg.priority}">${sg.priority}</span>
                                     <span class="sig-val ${sg.signal}">${sg.signal}</span>
@@ -135,6 +140,10 @@
                                     <div class="stat-box"><span class="s-label">Stop Loss</span><span class="s-value" style="color:var(--red)">${sg.stop_loss || '---'}</span></div>
                                     <div class="stat-box"><span class="s-label">Target 1</span><span class="s-value" style="color:var(--green)">${sg.tp1 || '---'}</span></div>
                                     <div class="stat-box"><span class="s-label">Target 2</span><span class="s-value" style="color:var(--green)">${sg.tp2 || '---'}</span></div>
+                                </div>
+                                <div class="reasoning">
+                                    <b>AI Analysis:</b> ${sg.reasoning || 'Analyzing market data...'}
+                                    ${sg.win_rate ? `<br><b>Win Rate:</b> ${sg.win_rate}%` : ''}
                                 </div>
                                 <div class="indicators">
                                     <div class="ind-row">
@@ -164,10 +173,10 @@
                 }
             } catch (e) {
                 console.error("Update error:", e);
-                document.getElementById('grid').innerHTML = '<div class="empty-msg">Error loading signals.json. Check GitHub Actions.</div>';
+                document.getElementById('grid').innerHTML = `<div class="empty-msg">Error loading signals.json: ${e.message}</div>`;
             }
         }
-        
+
         upd();
         setInterval(upd, 60000);
     </script>
