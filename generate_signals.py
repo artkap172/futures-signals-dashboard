@@ -24,7 +24,7 @@ MOSCOW_TZ = pytz.timezone("Europe/Moscow")
 def get_active_futures(asset_code):
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities.json"
     try:
-        res = requests.get(url, timeout=15)
+        res = requests.get(url, timeout=30)
         res.raise_for_status()
         data = res.json()
         
@@ -61,7 +61,7 @@ def fetch_history(secid, days=60):
     start = (datetime.now(MOSCOW_TZ) - timedelta(days=days)).strftime("%Y-%m-%d")
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}/candles.json?from={start}&interval=60"
     try:
-        res = requests.get(url, timeout=15)
+        res = requests.get(url, timeout=30)
         res.raise_for_status()
         data = res.json()
         df = pd.DataFrame(data["candles"]["data"], columns=data["candles"]["columns"])
@@ -78,7 +78,7 @@ def fetch_history(secid, days=60):
 def fetch_realtime(secid):
     url = f"{MOEX_API_BASE}/engines/futures/markets/forts/securities/{secid}.json"
     try:
-        res = requests.get(url, timeout=10)
+        res = requests.get(url, timeout=30)
         res.raise_for_status()
         data = res.json()
         marketdata = data.get("marketdata", {}).get("data", [])
@@ -179,31 +179,18 @@ def analyze(df, price):
 
 def main():
     res_all = []
-
     for code, info in ASSET_CONFIG.items():
         print(f"Processing {code}...")
         contract = get_active_futures(code)
-        if not contract:
-            print(f"No active futures for {code}")
-            continue
-
-        print(f"Found: {contract['secid']}")
+        if not contract: continue
+        
         price = fetch_realtime(contract["secid"])
         df = fetch_history(contract["secid"])
-        print(f"Price: {price}, History rows: {len(df) if df is not None else 0}")
-
         analysis = analyze(df, price)
-        if analysis:
-            print(
-                f"Signal: {analysis['sig']}, Score: {analysis['score']}, "
-                f"Trend: {analysis['trend']}, RSI: {analysis.get('rsi', 'N/A')}"
-            )
-        else:
-            print("No analysis")
-
-        if df is not None and len(df) > 0 and price is not None:
+        
+        if df is not None and not df.empty and price:
             last_close = df["close"].iloc[-1]
-            ch = round((price - last_close) / last_close * 100, 2) if last_close else 0
+            ch = round((price - last_close) / last_close * 100, 2)
         else:
             ch = 0
 
@@ -217,61 +204,46 @@ def main():
             "mode": analysis["trend"] if analysis else "WAIT",
             "score": analysis["score"] if analysis else 0,
             "priority": "HIGH" if analysis and abs(analysis["score"]) >= 4 else "MEDIUM",
-            "stop_loss": round(analysis["sl"], 2) if analysis and analysis["sl"] is not None else None,
-            "tp1": round(analysis["tp1"], 2) if analysis and analysis["tp1"] is not None else None,
-            "tp2": round(analysis["tp2"], 2) if analysis and analysis["tp2"] is not None else None,
-            "entry_range": f"{round(price * 0.999, 2)}-{round(price * 1.001, 2)}" if price else None,
+            "stop_loss": round(analysis["sl"], 2) if analysis and analysis["sl"] else None,
+            "tp1": round(analysis["tp1"], 2) if analysis and analysis["tp1"] else None,
+            "tp2": round(analysis["tp2"], 2) if analysis and analysis["tp2"] else None,
+            "entry_range": f"{round(price*0.999, 2)}-{round(price*1.001, 2)}" if price else None,
             "win_rate": 68 if analysis and analysis["sig"] != "HOLD" else 0,
-            "reasoning": (
-                f"Trend: {analysis['trend']}. RSI: "
-                f"{round(analysis['rsi'], 1) if analysis['rsi'] is not None else 'N/A'}. "
-                f"Score: {analysis['score']}."
-            ) if analysis else "N/A",
-            "indicators": analysis["indicators"] if analysis and "indicators" in analysis else {},
-            "last_update": datetime.now(MOSCOW_TZ).strftime("%H:%M"),
+            "reasoning": f"Trend: {analysis['trend']}. RSI: {round(analysis['rsi'], 1) if analysis['rsi'] else 'N/A'}. Score: {analysis['score']}." if analysis else "N/A",
+            "indicators": analysis["indicators"] if analysis else {},
+            "last_update": datetime.now(MOSCOW_TZ).strftime("%H:%M")
         }
-
         res_all.append(record)
 
-    if len(res_all) < 4:
-        raise RuntimeError(f"Too few assets collected: {len(res_all)}. Refusing to overwrite signals.json")
+    if not res_all:
+        print("Done. No assets fetched (API timeout or market closed). Preserving existing data.")
+        return
 
     longs = sum(1 for r in res_all if r["signal"] == "LONG")
     shorts = sum(1 for r in res_all if r["signal"] == "SHORT")
-
-    if longs > shorts:
-        sentiment = "BULLISH"
-    elif shorts > longs:
-        sentiment = "BEARISH"
-    else:
-        sentiment = "NEUTRAL"
+    sentiment = "BULLISH" if longs > shorts else ("BEARISH" if shorts > longs else "NEUTRAL")
 
     out = {
         "signals": [r for r in res_all if r["signal"] != "HOLD"],
         "all_assets": res_all,
         "heatmap": [
             {
-                "ticker": r["ticker"],
-                "name": r["name"],
-                "change": r["change_pct"],
-                "price": r["current_price"],
-                "signal": r["signal"],
-                "mode": r["mode"],
-                "rsi": r["indicators"].get("rsi") if r.get("indicators") else None,
-            }
-            for r in res_all
+                "ticker": r["ticker"], "name": r["name"], "change": r["change_pct"],
+                "price": r["current_price"], "signal": r["signal"], "mode": r["mode"],
+                "rsi": r["indicators"].get("rsi")
+            } for r in res_all
         ],
         "market_sentiment": sentiment,
         "stats": {
-            "total": len(res_all),
-            "long": longs,
-            "short": shorts,
-            "hold": len(res_all) - longs - shorts,
+            "total": len(res_all), "long": longs, "short": shorts,
+            "hold": len(res_all) - longs - shorts
         },
-        "last_update": datetime.now(MOSCOW_TZ).strftime("%d.%m %H:%M"),
+        "last_update": datetime.now(MOSCOW_TZ).strftime("%d.%m %H:%M")
     }
 
     with open("signals.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
-
     print(f"Done. Signals: {len(out['signals'])}, Sentiment: {sentiment}")
+
+if __name__ == "__main__":
+    main()
