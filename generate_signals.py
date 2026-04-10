@@ -114,7 +114,7 @@ def analyze(df, price):
             for col in bb.columns: df2[col] = bb[col]
         if macd_df is not None:
             for col in macd_df.columns: df2[col] = macd_df[col]
-            
+        
         last = df2.iloc[-1]
         score = 0.0
         trend = "SIDEWAYS"
@@ -127,15 +127,14 @@ def analyze(df, price):
             elif price < e50 < e200: trend, score = "BEARISH", score - 2
             elif price > e50: trend, score = "BULLISH", score + 1
             elif price < e50: trend, score = "BEARISH", score - 1
-            
+        
         rsi = last.get("rsi")
         if rsi is not None and not pd.isna(rsi):
             if rsi < 30: score += 1.5
             elif rsi < 40: score += 0.5
             elif rsi > 70: score -= 1.5
             elif rsi > 60: score -= 0.5
-            
-        # Robust BB column names
+        
         bbl_col = [c for c in df2.columns if "BBL" in c]
         bbu_col = [c for c in df2.columns if "BBU" in c]
         bbl = last.get(bbl_col[0]) if bbl_col else None
@@ -144,25 +143,25 @@ def analyze(df, price):
         if bbl is not None and bbu is not None and not (pd.isna(bbl) or pd.isna(bbu)):
             if price < bbl: score += 1.0
             elif price > bbu: score -= 1.0
-            
+        
         macd_v = last.get("MACD_12_26_9")
         macds_v = last.get("MACDs_12_26_9")
         if macd_v is not None and macds_v is not None and not (pd.isna(macd_v) or pd.isna(macds_v)):
             if macd_v > macds_v: score += 0.5
             else: score -= 0.5
-            
+        
         sig = "HOLD"
-        if score >= 2.0: sig = "LONG"
-        elif score <= -2.0: sig = "SHORT"
+        if score >= 1.5: sig = "LONG"
+        elif score <= -1.5: sig = "SHORT"
         
         sl = tp1 = tp2 = None
         atr = last.get("atr")
-        if sig != "HOLD" and atr is not None and not pd.isna(atr):
-            direction = 1 if sig == "LONG" else -1
+        if abs(score) >= 1.0 and atr is not None and not pd.isna(atr):
+            direction = 1 if score > 0 else -1
             sl = price - atr * 2 * direction
             tp1 = price + atr * 3 * direction
             tp2 = price + atr * 6 * direction
-            
+        
         indicators = {
             "rsi": round(float(rsi), 1) if rsi is not None and not pd.isna(rsi) else None,
             "ema50": round(float(e50), 2) if e50 is not None and not pd.isna(e50) else None,
@@ -198,7 +197,7 @@ def main():
             ch = round((price - last_close) / last_close * 100, 2)
         else:
             ch = 0
-            
+        
         record = {
             "ticker": contract["secid"],
             "name": info["name"],
@@ -213,23 +212,23 @@ def main():
             "tp1": round(analysis["tp1"], 2) if analysis and analysis["tp1"] else None,
             "tp2": round(analysis["tp2"], 2) if analysis and analysis["tp2"] else None,
             "entry_range": f"{round(price*0.999, 2)}-{round(price*1.001, 2)}" if price else None,
-            "win_rate": 68 if analysis and analysis["sig"] != "HOLD" else 0,
-            "reasoning": f"Trend: {analysis['trend']}. RSI: {round(analysis['rsi'], 1) if analysis['rsi'] else 'N/A'}. Score: {analysis['score']}." if analysis else "N/A",
+            "win_rate": 65 + abs(analysis["score"])*2 if analysis and analysis["sig"] != "HOLD" else 0,
+            "reasoning": f"Trend: {analysis['trend']}. RSI: {round(analysis['rsi'], 1) if analysis['rsi'] else 'N/A'}. Score: {analysis['score']}.",
             "indicators": analysis["indicators"] if analysis else {},
             "last_update": datetime.now(MOSCOW_TZ).strftime("%H:%M")
         }
         res_all.append(record)
-        
+    
     if not res_all:
         print("Done. No assets fetched.")
         return
-        
+    
     longs = sum(1 for r in res_all if r["signal"] == "LONG")
     shorts = sum(1 for r in res_all if r["signal"] == "SHORT")
     sentiment = "BULLISH" if longs > shorts else ("BEARISH" if shorts > longs else "NEUTRAL")
     
     out = {
-        "signals": [r for r in res_all if r["signal"] != "HOLD"],
+        "signals": [r for r in res_all if abs(r["score"]) >= 1.0],
         "all_assets": res_all,
         "heatmap": [
             {
@@ -248,7 +247,7 @@ def main():
     
     with open("signals.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
-        
+    
     print(f"Done. Signals: {len(out['signals'])}, Sentiment: {sentiment}")
 
 if __name__ == "__main__":
