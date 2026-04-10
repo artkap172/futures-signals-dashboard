@@ -45,7 +45,7 @@ def get_active_futures(asset_code):
                 active.append({
                     "secid": sid,
                     "name": row[cols.index("SHORTNAME")],
-                    "expiry": row[cols.index("LASTDELIVERYDATE")],
+                    "expiry": row[cols.index("LASTDELDATE")],
                     "vol": vols.get(sid, 0)
                 })
         
