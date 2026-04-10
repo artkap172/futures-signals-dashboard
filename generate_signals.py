@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 import json
 import os
 from datetime import datetime, timedelta
@@ -16,6 +15,8 @@ ASSET_CONFIG = {
     "SV": {"name": "Серебро", "group": "commodities"},
     "Si": {"name": "USD/RUB", "group": "currency"},
     "MX": {"name": "Индекс МосБиржи", "group": "indices"},
+    "SR": {"name": "Сбербанк", "group": "stocks"},
+    "GZ": {"name": "Газпром", "group": "stocks"},
 }
 
 MOEX_API_BASE = "https://iss.moex.com/iss"
@@ -93,63 +94,67 @@ def fetch_realtime(secid):
         return None
 
 def analyze(df, price):
-    if df is None or len(df) < 50 or price is None: return None
+    if df is None or len(df) < 20 or price is None: return None
     try:
         close = df["close"].copy()
         rsi_val = ta.rsi(close, length=14)
-        ema50 = ta.ema(close, length=50)
+        ema50 = ta.ema(close, length=50) if len(close) >= 50 else ta.ema(close, length=min(len(close)-1, 20))
         ema200 = ta.ema(close, length=200) if len(close) >= 200 else ta.ema(close, length=min(len(close)-1, 100))
         bb = ta.bbands(close, length=20)
         atr_val = ta.atr(df["high"], df["low"], close, length=14)
         macd_df = ta.macd(close, fast=12, slow=26, signal=9)
-
+        
         df2 = df.copy()
         df2["rsi"] = rsi_val
         df2["ema50"] = ema50
         df2["ema200"] = ema200
         df2["atr"] = atr_val
+        
         if bb is not None:
             for col in bb.columns: df2[col] = bb[col]
         if macd_df is not None:
             for col in macd_df.columns: df2[col] = macd_df[col]
-
+            
         last = df2.iloc[-1]
         score = 0.0
         trend = "SIDEWAYS"
-
+        
         e50 = last.get("ema50")
         e200 = last.get("ema200")
+        
         if e50 is not None and e200 is not None and not (pd.isna(e50) or pd.isna(e200)):
-            if price > e50 > e200:
-                trend, score = "BULLISH", score + 2
-            elif price < e50 < e200:
-                trend, score = "BEARISH", score - 2
-            elif price > e50:
-                trend, score = "BULLISH", score + 1
-            elif price < e50:
-                trend, score = "BEARISH", score - 1
-
+            if price > e50 > e200: trend, score = "BULLISH", score + 2
+            elif price < e50 < e200: trend, score = "BEARISH", score - 2
+            elif price > e50: trend, score = "BULLISH", score + 1
+            elif price < e50: trend, score = "BEARISH", score - 1
+            
         rsi = last.get("rsi")
         if rsi is not None and not pd.isna(rsi):
-            if rsi < 30: score += 2
-            elif rsi < 40: score += 1
-            elif rsi > 70: score -= 2
-            elif rsi > 60: score -= 1
-
-        bbl, bbu = last.get("BBL_20_2.0"), last.get("BBU_20_2.0")
+            if rsi < 30: score += 1.5
+            elif rsi < 40: score += 0.5
+            elif rsi > 70: score -= 1.5
+            elif rsi > 60: score -= 0.5
+            
+        # Robust BB column names
+        bbl_col = [c for c in df2.columns if "BBL" in c]
+        bbu_col = [c for c in df2.columns if "BBU" in c]
+        bbl = last.get(bbl_col[0]) if bbl_col else None
+        bbu = last.get(bbu_col[0]) if bbu_col else None
+        
         if bbl is not None and bbu is not None and not (pd.isna(bbl) or pd.isna(bbu)):
-            if price < bbl: score += 1.5
-            elif price > bbu: score -= 1.5
-
-        macd_v, macds_v = last.get("MACD_12_26_9"), last.get("MACDs_12_26_9")
+            if price < bbl: score += 1.0
+            elif price > bbu: score -= 1.0
+            
+        macd_v = last.get("MACD_12_26_9")
+        macds_v = last.get("MACDs_12_26_9")
         if macd_v is not None and macds_v is not None and not (pd.isna(macd_v) or pd.isna(macds_v)):
             if macd_v > macds_v: score += 0.5
             else: score -= 0.5
-
+            
         sig = "HOLD"
-        if score >= 2.5: sig = "LONG"
-        elif score <= -2.5: sig = "SHORT"
-
+        if score >= 2.0: sig = "LONG"
+        elif score <= -2.0: sig = "SHORT"
+        
         sl = tp1 = tp2 = None
         atr = last.get("atr")
         if sig != "HOLD" and atr is not None and not pd.isna(atr):
@@ -157,7 +162,7 @@ def analyze(df, price):
             sl = price - atr * 2 * direction
             tp1 = price + atr * 3 * direction
             tp2 = price + atr * 6 * direction
-
+            
         indicators = {
             "rsi": round(float(rsi), 1) if rsi is not None and not pd.isna(rsi) else None,
             "ema50": round(float(e50), 2) if e50 is not None and not pd.isna(e50) else None,
@@ -168,7 +173,7 @@ def analyze(df, price):
             "macd_signal": round(float(macds_v), 4) if macds_v is not None and not pd.isna(macds_v) else None,
             "atr": round(float(atr), 2) if atr is not None and not pd.isna(atr) else None
         }
-
+        
         return {
             "sig": sig, "score": round(score, 2), "trend": trend,
             "sl": sl, "tp1": tp1, "tp2": tp2, "rsi": rsi, "indicators": indicators
@@ -193,7 +198,7 @@ def main():
             ch = round((price - last_close) / last_close * 100, 2)
         else:
             ch = 0
-
+            
         record = {
             "ticker": contract["secid"],
             "name": info["name"],
@@ -203,7 +208,7 @@ def main():
             "signal": analysis["sig"] if analysis else "HOLD",
             "mode": analysis["trend"] if analysis else "WAIT",
             "score": analysis["score"] if analysis else 0,
-            "priority": "HIGH" if analysis and abs(analysis["score"]) >= 4 else "MEDIUM",
+            "priority": "HIGH" if analysis and abs(analysis["score"]) >= 3 else "MEDIUM",
             "stop_loss": round(analysis["sl"], 2) if analysis and analysis["sl"] else None,
             "tp1": round(analysis["tp1"], 2) if analysis and analysis["tp1"] else None,
             "tp2": round(analysis["tp2"], 2) if analysis and analysis["tp2"] else None,
@@ -214,15 +219,15 @@ def main():
             "last_update": datetime.now(MOSCOW_TZ).strftime("%H:%M")
         }
         res_all.append(record)
-
+        
     if not res_all:
-        print("Done. No assets fetched (API timeout or market closed). Preserving existing data.")
+        print("Done. No assets fetched.")
         return
-
+        
     longs = sum(1 for r in res_all if r["signal"] == "LONG")
     shorts = sum(1 for r in res_all if r["signal"] == "SHORT")
     sentiment = "BULLISH" if longs > shorts else ("BEARISH" if shorts > longs else "NEUTRAL")
-
+    
     out = {
         "signals": [r for r in res_all if r["signal"] != "HOLD"],
         "all_assets": res_all,
@@ -240,9 +245,10 @@ def main():
         },
         "last_update": datetime.now(MOSCOW_TZ).strftime("%d.%m %H:%M")
     }
-
+    
     with open("signals.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
+        
     print(f"Done. Signals: {len(out['signals'])}, Sentiment: {sentiment}")
 
 if __name__ == "__main__":
