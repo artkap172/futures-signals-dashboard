@@ -4,16 +4,16 @@
       "ticker": "GDM6",
       "name": "Золото",
       "group": "commodities",
-      "current_price": 4207.5,
-      "change_pct": -6.35,
+      "current_price": 4212.8,
+      "change_pct": -6.24,
       "signal": "SHORT",
       "mode": "BEARISH",
       "score": -1.5,
       "priority": "MEDIUM",
-      "stop_loss": 4241.59,
-      "tp1": 4156.36,
-      "tp2": 4105.22,
-      "entry_range": "4203.29-4211.71",
+      "stop_loss": 4246.89,
+      "tp1": 4161.66,
+      "tp2": 4110.52,
+      "entry_range": "4208.59-4217.01",
       "win_rate": 68.0,
       "reasoning": "Trend: BEARISH. RSI: 42.5. Score: -1.5.",
       "indicators": {
@@ -26,7 +26,7 @@
         "macd_signal": -13.8283,
         "atr": 17.05
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "SiM6",
@@ -54,22 +54,22 @@
         "macd_signal": -107.2147,
         "atr": 195.42
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "MXM6",
       "name": "Индекс МосБиржи",
       "group": "indices",
-      "current_price": 251675,
-      "change_pct": -5.69,
+      "current_price": 251525,
+      "change_pct": -5.74,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": -1.0,
       "priority": "MEDIUM",
-      "stop_loss": 253484.27,
-      "tp1": 248961.1,
-      "tp2": 246247.2,
-      "entry_range": "251423.33-251926.67",
+      "stop_loss": 253334.27,
+      "tp1": 248811.1,
+      "tp2": 246097.2,
+      "entry_range": "251273.48-251776.52",
       "win_rate": 0,
       "reasoning": "Trend: BEARISH. RSI: 38.0. Score: -1.0.",
       "indicators": {
@@ -82,22 +82,22 @@
         "macd_signal": -240.2767,
         "atr": 904.63
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "SRM6",
       "name": "Сбербанк",
       "group": "stocks",
-      "current_price": 32285,
-      "change_pct": -1.37,
+      "current_price": 32307,
+      "change_pct": -1.3,
       "signal": "SHORT",
       "mode": "BEARISH",
       "score": -1.5,
       "priority": "MEDIUM",
-      "stop_loss": 32429.68,
-      "tp1": 32067.98,
-      "tp2": 31850.96,
-      "entry_range": "32252.72-32317.28",
+      "stop_loss": 32451.68,
+      "tp1": 32089.98,
+      "tp2": 31872.96,
+      "entry_range": "32274.69-32339.31",
       "win_rate": 68.0,
       "reasoning": "Trend: BEARISH. RSI: 41.7. Score: -1.5.",
       "indicators": {
@@ -110,7 +110,7 @@
         "macd_signal": -23.4406,
         "atr": 72.34
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     }
   ],
   "all_assets": [
@@ -118,8 +118,8 @@
       "ticker": "BRN6",
       "name": "Нефть Brent",
       "group": "commodities",
-      "current_price": 87.3,
-      "change_pct": -13.94,
+      "current_price": 86.8,
+      "change_pct": -14.43,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": 0.0,
@@ -127,7 +127,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "87.21-87.39",
+      "entry_range": "86.71-86.89",
       "win_rate": 0,
       "reasoning": "Trend: BEARISH. RSI: 31.5. Score: 0.0.",
       "indicators": {
@@ -140,14 +140,14 @@
         "macd_signal": -0.7743,
         "atr": 1.19
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "NGM6",
       "name": "Природный газ",
       "group": "commodities",
-      "current_price": 3.149,
-      "change_pct": -1.78,
+      "current_price": 3.137,
+      "change_pct": -2.15,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": 0.5,
@@ -155,7 +155,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "3.15-3.15",
+      "entry_range": "3.13-3.14",
       "win_rate": 0,
       "reasoning": "Trend: BEARISH. RSI: 50.0. Score: 0.5.",
       "indicators": {
@@ -168,22 +168,22 @@
         "macd_signal": -0.0144,
         "atr": 0.03
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "GDM6",
       "name": "Золото",
       "group": "commodities",
-      "current_price": 4207.5,
-      "change_pct": -6.35,
+      "current_price": 4212.8,
+      "change_pct": -6.24,
       "signal": "SHORT",
       "mode": "BEARISH",
       "score": -1.5,
       "priority": "MEDIUM",
-      "stop_loss": 4241.59,
-      "tp1": 4156.36,
-      "tp2": 4105.22,
-      "entry_range": "4203.29-4211.71",
+      "stop_loss": 4246.89,
+      "tp1": 4161.66,
+      "tp2": 4110.52,
+      "entry_range": "4208.59-4217.01",
       "win_rate": 68.0,
       "reasoning": "Trend: BEARISH. RSI: 42.5. Score: -1.5.",
       "indicators": {
@@ -196,14 +196,14 @@
         "macd_signal": -13.8283,
         "atr": 17.05
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "SVM6",
       "name": "Серебро",
       "group": "commodities",
-      "current_price": 68.23,
-      "change_pct": -10.9,
+      "current_price": 68.15,
+      "change_pct": -11.01,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": -0.5,
@@ -211,7 +211,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "68.16-68.3",
+      "entry_range": "68.08-68.22",
       "win_rate": 0,
       "reasoning": "Trend: BEARISH. RSI: 51.2. Score: -0.5.",
       "indicators": {
@@ -224,7 +224,7 @@
         "macd_signal": -0.4778,
         "atr": 0.71
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "SiM6",
@@ -252,22 +252,22 @@
         "macd_signal": -107.2147,
         "atr": 195.42
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "MXM6",
       "name": "Индекс МосБиржи",
       "group": "indices",
-      "current_price": 251675,
-      "change_pct": -5.69,
+      "current_price": 251525,
+      "change_pct": -5.74,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": -1.0,
       "priority": "MEDIUM",
-      "stop_loss": 253484.27,
-      "tp1": 248961.1,
-      "tp2": 246247.2,
-      "entry_range": "251423.33-251926.67",
+      "stop_loss": 253334.27,
+      "tp1": 248811.1,
+      "tp2": 246097.2,
+      "entry_range": "251273.48-251776.52",
       "win_rate": 0,
       "reasoning": "Trend: BEARISH. RSI: 38.0. Score: -1.0.",
       "indicators": {
@@ -280,22 +280,22 @@
         "macd_signal": -240.2767,
         "atr": 904.63
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "SRM6",
       "name": "Сбербанк",
       "group": "stocks",
-      "current_price": 32285,
-      "change_pct": -1.37,
+      "current_price": 32307,
+      "change_pct": -1.3,
       "signal": "SHORT",
       "mode": "BEARISH",
       "score": -1.5,
       "priority": "MEDIUM",
-      "stop_loss": 32429.68,
-      "tp1": 32067.98,
-      "tp2": 31850.96,
-      "entry_range": "32252.72-32317.28",
+      "stop_loss": 32451.68,
+      "tp1": 32089.98,
+      "tp2": 31872.96,
+      "entry_range": "32274.69-32339.31",
       "win_rate": 68.0,
       "reasoning": "Trend: BEARISH. RSI: 41.7. Score: -1.5.",
       "indicators": {
@@ -308,14 +308,14 @@
         "macd_signal": -23.4406,
         "atr": 72.34
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     },
     {
       "ticker": "GZM6",
       "name": "Газпром",
       "group": "stocks",
-      "current_price": 11249,
-      "change_pct": -6.95,
+      "current_price": 11260,
+      "change_pct": -6.86,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": 0.0,
@@ -323,7 +323,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "11237.75-11260.25",
+      "entry_range": "11248.74-11271.26",
       "win_rate": 0,
       "reasoning": "Trend: BEARISH. RSI: 28.3. Score: 0.0.",
       "indicators": {
@@ -336,15 +336,15 @@
         "macd_signal": -53.1428,
         "atr": 82.65
       },
-      "last_update": "07:51"
+      "last_update": "11:16"
     }
   ],
   "heatmap": [
     {
       "ticker": "BRN6",
       "name": "Нефть Brent",
-      "change": -13.94,
-      "price": 87.3,
+      "change": -14.43,
+      "price": 86.8,
       "signal": "HOLD",
       "mode": "BEARISH",
       "rsi": 31.5
@@ -352,8 +352,8 @@
     {
       "ticker": "NGM6",
       "name": "Природный газ",
-      "change": -1.78,
-      "price": 3.149,
+      "change": -2.15,
+      "price": 3.137,
       "signal": "HOLD",
       "mode": "BEARISH",
       "rsi": 50.0
@@ -361,8 +361,8 @@
     {
       "ticker": "GDM6",
       "name": "Золото",
-      "change": -6.35,
-      "price": 4207.5,
+      "change": -6.24,
+      "price": 4212.8,
       "signal": "SHORT",
       "mode": "BEARISH",
       "rsi": 42.5
@@ -370,8 +370,8 @@
     {
       "ticker": "SVM6",
       "name": "Серебро",
-      "change": -10.9,
-      "price": 68.23,
+      "change": -11.01,
+      "price": 68.15,
       "signal": "HOLD",
       "mode": "BEARISH",
       "rsi": 51.2
@@ -388,8 +388,8 @@
     {
       "ticker": "MXM6",
       "name": "Индекс МосБиржи",
-      "change": -5.69,
-      "price": 251675,
+      "change": -5.74,
+      "price": 251525,
       "signal": "HOLD",
       "mode": "BEARISH",
       "rsi": 38.0
@@ -397,8 +397,8 @@
     {
       "ticker": "SRM6",
       "name": "Сбербанк",
-      "change": -1.37,
-      "price": 32285,
+      "change": -1.3,
+      "price": 32307,
       "signal": "SHORT",
       "mode": "BEARISH",
       "rsi": 41.7
@@ -406,8 +406,8 @@
     {
       "ticker": "GZM6",
       "name": "Газпром",
-      "change": -6.95,
-      "price": 11249,
+      "change": -6.86,
+      "price": 11260,
       "signal": "HOLD",
       "mode": "BEARISH",
       "rsi": 28.3
@@ -420,5 +420,5 @@
     "short": 2,
     "hold": 6
   },
-  "last_update": "13.06 07:51"
+  "last_update": "13.06 11:16"
 }
