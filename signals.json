@@ -26,7 +26,7 @@
         "macd_signal": 0.8531,
         "atr": 0.87
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "NGN6",
@@ -54,7 +54,7 @@
         "macd_signal": 0.0222,
         "atr": 0.03
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "GDU6",
@@ -82,7 +82,7 @@
         "macd_signal": -9.4326,
         "atr": 16.01
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "SVU6",
@@ -110,7 +110,7 @@
         "macd_signal": -0.471,
         "atr": 0.52
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     }
   ],
   "all_assets": [
@@ -140,7 +140,7 @@
         "macd_signal": 0.8531,
         "atr": 0.87
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "NGN6",
@@ -168,7 +168,7 @@
         "macd_signal": 0.0222,
         "atr": 0.03
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "GDU6",
@@ -196,7 +196,7 @@
         "macd_signal": -9.4326,
         "atr": 16.01
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "SVU6",
@@ -224,7 +224,7 @@
         "macd_signal": -0.471,
         "atr": 0.52
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "SiU6",
@@ -252,7 +252,7 @@
         "macd_signal": -19.397,
         "atr": 208.33
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "MXU6",
@@ -280,7 +280,7 @@
         "macd_signal": -599.0116,
         "atr": 433.72
       },
-      "last_update": "22:50"
+      "last_update": "23:51"
     },
     {
       "ticker": "SRU6",
@@ -308,7 +308,7 @@
         "macd_signal": -44.7407,
         "atr": 53.96
       },
-      "last_update": "22:50"
+      "last_update": "23:52"
     },
     {
       "ticker": "GZU6",
@@ -336,7 +336,7 @@
         "macd_signal": -13.2526,
         "atr": 42.01
       },
-      "last_update": "22:50"
+      "last_update": "23:52"
     }
   ],
   "heatmap": [
@@ -420,5 +420,5 @@
     "short": 2,
     "hold": 6
   },
-  "last_update": "27.06 22:50"
+  "last_update": "27.06 23:52"
 }
