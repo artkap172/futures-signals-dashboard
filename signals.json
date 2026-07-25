@@ -26,7 +26,7 @@
         "macd_signal": -0.6074,
         "atr": 0.45
       },
-      "last_update": "01:34"
+      "last_update": "02:40"
     },
     {
       "ticker": "GDU6",
@@ -54,7 +54,7 @@
         "macd_signal": 13.092,
         "atr": 23.76
       },
-      "last_update": "01:34"
+      "last_update": "02:40"
     },
     {
       "ticker": "SVU6",
@@ -82,7 +82,7 @@
         "macd_signal": 0.3475,
         "atr": 0.73
       },
-      "last_update": "01:35"
+      "last_update": "02:40"
     },
     {
       "ticker": "MXU6",
@@ -110,7 +110,7 @@
         "macd_signal": -2571.891,
         "atr": 2078.16
       },
-      "last_update": "01:35"
+      "last_update": "02:41"
     },
     {
       "ticker": "SRU6",
@@ -138,7 +138,7 @@
         "macd_signal": -146.2716,
         "atr": 203.02
       },
-      "last_update": "01:35"
+      "last_update": "02:41"
     }
   ],
   "all_assets": [
@@ -168,7 +168,7 @@
         "macd_signal": -0.6074,
         "atr": 0.45
       },
-      "last_update": "01:34"
+      "last_update": "02:40"
     },
     {
       "ticker": "NGN6",
@@ -196,7 +196,7 @@
         "macd_signal": -0.0137,
         "atr": 0.03
       },
-      "last_update": "01:34"
+      "last_update": "02:40"
     },
     {
       "ticker": "GDU6",
@@ -224,7 +224,7 @@
         "macd_signal": 13.092,
         "atr": 23.76
       },
-      "last_update": "01:34"
+      "last_update": "02:40"
     },
     {
       "ticker": "SVU6",
@@ -252,7 +252,7 @@
         "macd_signal": 0.3475,
         "atr": 0.73
       },
-      "last_update": "01:35"
+      "last_update": "02:40"
     },
     {
       "ticker": "SiU6",
@@ -280,7 +280,7 @@
         "macd_signal": 49.9506,
         "atr": 285.89
       },
-      "last_update": "01:35"
+      "last_update": "02:40"
     },
     {
       "ticker": "MXU6",
@@ -308,7 +308,7 @@
         "macd_signal": -2571.891,
         "atr": 2078.16
       },
-      "last_update": "01:35"
+      "last_update": "02:41"
     },
     {
       "ticker": "SRU6",
@@ -336,7 +336,7 @@
         "macd_signal": -146.2716,
         "atr": 203.02
       },
-      "last_update": "01:35"
+      "last_update": "02:41"
     },
     {
       "ticker": "GZU6",
@@ -364,7 +364,7 @@
         "macd_signal": -78.871,
         "atr": 91.89
       },
-      "last_update": "01:35"
+      "last_update": "02:41"
     }
   ],
   "heatmap": [
@@ -448,5 +448,5 @@
     "short": 3,
     "hold": 5
   },
-  "last_update": "26.07 01:35"
+  "last_update": "26.07 02:41"
 }
