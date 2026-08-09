@@ -26,7 +26,7 @@
         "macd_signal": 0.1614,
         "atr": 0.69
       },
-      "last_update": "23:21"
+      "last_update": "23:59"
     },
     {
       "ticker": "NGQ6",
@@ -54,63 +54,35 @@
         "macd_signal": -0.0067,
         "atr": 0.03
       },
-      "last_update": "23:21"
-    },
-    {
-      "ticker": "MXU6",
-      "name": "Индекс МосБиржи",
-      "group": "indices",
-      "current_price": 232825,
-      "change_pct": 13.71,
-      "signal": "HOLD",
-      "mode": "BULLISH",
-      "score": 1.0,
-      "priority": "MEDIUM",
-      "stop_loss": 230085.12,
-      "tp1": 236934.82,
-      "tp2": 241044.64,
-      "entry_range": "232592.17-233057.82",
-      "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 17.6. Score: 1.0.",
-      "indicators": {
-        "rsi": 17.6,
-        "ema50": 212437.3,
-        "ema200": 218297.63,
-        "bbl": 205723.44,
-        "bbu": 214311.56,
-        "macd": -2068.6383,
-        "macd_signal": -1678.3179,
-        "atr": 1369.94
-      },
-      "last_update": "23:21"
+      "last_update": "23:59"
     },
     {
       "ticker": "GZU6",
       "name": "Газпром",
       "group": "stocks",
       "current_price": 9507,
-      "change_pct": 9.79,
+      "change_pct": 11.58,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 1.0,
       "priority": "MEDIUM",
-      "stop_loss": 9324.6,
-      "tp1": 9780.59,
-      "tp2": 10054.19,
+      "stop_loss": 9297.51,
+      "tp1": 9821.23,
+      "tp2": 10135.47,
       "entry_range": "9497.49-9516.51",
       "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 18.7. Score: 1.0.",
+      "reasoning": "Trend: BULLISH. RSI: 35.2. Score: 1.0.",
       "indicators": {
-        "rsi": 18.7,
-        "ema50": 9146.67,
-        "ema200": 9634.9,
-        "bbl": 8496.64,
-        "bbu": 9288.46,
-        "macd": -179.0944,
-        "macd_signal": -173.319,
-        "atr": 91.2
+        "rsi": 35.2,
+        "ema50": 8892.67,
+        "ema200": 9490.53,
+        "bbl": 8469.42,
+        "bbu": 8749.98,
+        "macd": -112.8015,
+        "macd_signal": -126.5401,
+        "atr": 104.74
       },
-      "last_update": "23:21"
+      "last_update": "00:00"
     }
   ],
   "all_assets": [
@@ -140,7 +112,7 @@
         "macd_signal": 0.1614,
         "atr": 0.69
       },
-      "last_update": "23:21"
+      "last_update": "23:59"
     },
     {
       "ticker": "NGQ6",
@@ -168,7 +140,7 @@
         "macd_signal": -0.0067,
         "atr": 0.03
       },
-      "last_update": "23:21"
+      "last_update": "23:59"
     },
     {
       "ticker": "GDU6",
@@ -196,7 +168,7 @@
         "macd_signal": -0.4016,
         "atr": 16.63
       },
-      "last_update": "23:21"
+      "last_update": "23:59"
     },
     {
       "ticker": "SVU6",
@@ -224,7 +196,7 @@
         "macd_signal": -0.1783,
         "atr": 0.53
       },
-      "last_update": "23:21"
+      "last_update": "23:59"
     },
     {
       "ticker": "SiU6",
@@ -252,42 +224,14 @@
         "macd_signal": -31.1929,
         "atr": 238.44
       },
-      "last_update": "23:21"
+      "last_update": "00:00"
     },
     {
       "ticker": "MXU6",
       "name": "Индекс МосБиржи",
       "group": "indices",
       "current_price": 232825,
-      "change_pct": 13.71,
-      "signal": "HOLD",
-      "mode": "BULLISH",
-      "score": 1.0,
-      "priority": "MEDIUM",
-      "stop_loss": 230085.12,
-      "tp1": 236934.82,
-      "tp2": 241044.64,
-      "entry_range": "232592.17-233057.82",
-      "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 17.6. Score: 1.0.",
-      "indicators": {
-        "rsi": 17.6,
-        "ema50": 212437.3,
-        "ema200": 218297.63,
-        "bbl": 205723.44,
-        "bbu": 214311.56,
-        "macd": -2068.6383,
-        "macd_signal": -1678.3179,
-        "atr": 1369.94
-      },
-      "last_update": "23:21"
-    },
-    {
-      "ticker": "SRU6",
-      "name": "Сбербанк",
-      "group": "stocks",
-      "current_price": 28859,
-      "change_pct": 13.47,
+      "change_pct": 15.88,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 0.0,
@@ -295,48 +239,76 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
+      "entry_range": "232592.17-233057.82",
+      "win_rate": 0,
+      "reasoning": "Trend: BULLISH. RSI: 34.7. Score: 0.0.",
+      "indicators": {
+        "rsi": 34.7,
+        "ema50": 207608.83,
+        "ema200": 216070.65,
+        "bbl": 196872.69,
+        "bbu": 209907.31,
+        "macd": -2953.2509,
+        "macd_signal": -2832.8297,
+        "atr": 1698.44
+      },
+      "last_update": "00:00"
+    },
+    {
+      "ticker": "SRU6",
+      "name": "Сбербанк",
+      "group": "stocks",
+      "current_price": 28859,
+      "change_pct": 13.53,
+      "signal": "HOLD",
+      "mode": "BULLISH",
+      "score": 0.5,
+      "priority": "MEDIUM",
+      "stop_loss": null,
+      "tp1": null,
+      "tp2": null,
       "entry_range": "28830.14-28887.86",
       "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 30.1. Score: 0.0.",
+      "reasoning": "Trend: BULLISH. RSI: 48.4. Score: 0.5.",
       "indicators": {
-        "rsi": 30.1,
-        "ema50": 26234.58,
-        "ema200": 26958.35,
-        "bbl": 25108.77,
-        "bbu": 26627.83,
-        "macd": -314.0234,
-        "macd_signal": -283.6086,
-        "atr": 192.35
+        "rsi": 48.4,
+        "ema50": 25776.61,
+        "ema200": 26719.74,
+        "bbl": 24936.13,
+        "bbu": 25577.77,
+        "macd": -169.3702,
+        "macd_signal": -235.9163,
+        "atr": 214.56
       },
-      "last_update": "23:21"
+      "last_update": "00:00"
     },
     {
       "ticker": "GZU6",
       "name": "Газпром",
       "group": "stocks",
       "current_price": 9507,
-      "change_pct": 9.79,
+      "change_pct": 11.58,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 1.0,
       "priority": "MEDIUM",
-      "stop_loss": 9324.6,
-      "tp1": 9780.59,
-      "tp2": 10054.19,
+      "stop_loss": 9297.51,
+      "tp1": 9821.23,
+      "tp2": 10135.47,
       "entry_range": "9497.49-9516.51",
       "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 18.7. Score: 1.0.",
+      "reasoning": "Trend: BULLISH. RSI: 35.2. Score: 1.0.",
       "indicators": {
-        "rsi": 18.7,
-        "ema50": 9146.67,
-        "ema200": 9634.9,
-        "bbl": 8496.64,
-        "bbu": 9288.46,
-        "macd": -179.0944,
-        "macd_signal": -173.319,
-        "atr": 91.2
+        "rsi": 35.2,
+        "ema50": 8892.67,
+        "ema200": 9490.53,
+        "bbl": 8469.42,
+        "bbu": 8749.98,
+        "macd": -112.8015,
+        "macd_signal": -126.5401,
+        "atr": 104.74
       },
-      "last_update": "23:21"
+      "last_update": "00:00"
     }
   ],
   "heatmap": [
@@ -388,29 +360,29 @@
     {
       "ticker": "MXU6",
       "name": "Индекс МосБиржи",
-      "change": 13.71,
+      "change": 15.88,
       "price": 232825,
       "signal": "HOLD",
       "mode": "BULLISH",
-      "rsi": 17.6
+      "rsi": 34.7
     },
     {
       "ticker": "SRU6",
       "name": "Сбербанк",
-      "change": 13.47,
+      "change": 13.53,
       "price": 28859,
       "signal": "HOLD",
       "mode": "BULLISH",
-      "rsi": 30.1
+      "rsi": 48.4
     },
     {
       "ticker": "GZU6",
       "name": "Газпром",
-      "change": 9.79,
+      "change": 11.58,
       "price": 9507,
       "signal": "HOLD",
       "mode": "BULLISH",
-      "rsi": 18.7
+      "rsi": 35.2
     }
   ],
   "market_sentiment": "NEUTRAL",
@@ -420,5 +392,5 @@
     "short": 1,
     "hold": 6
   },
-  "last_update": "09.08 23:21"
+  "last_update": "10.08 00:00"
 }
