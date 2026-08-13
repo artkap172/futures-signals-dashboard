@@ -4,16 +4,16 @@
       "ticker": "BRU6",
       "name": "Нефть Brent",
       "group": "commodities",
-      "current_price": 87.17,
-      "change_pct": 0.88,
+      "current_price": 87.57,
+      "change_pct": 1.34,
       "signal": "LONG",
       "mode": "BULLISH",
       "score": 2.0,
       "priority": "MEDIUM",
-      "stop_loss": 86.05,
-      "tp1": 88.85,
-      "tp2": 90.53,
-      "entry_range": "87.08-87.26",
+      "stop_loss": 86.45,
+      "tp1": 89.25,
+      "tp2": 90.93,
+      "entry_range": "87.48-87.66",
       "win_rate": 69.0,
       "reasoning": "Trend: BULLISH. RSI: 33.6. Score: 2.0.",
       "indicators": {
@@ -26,22 +26,22 @@
         "macd_signal": 0.5451,
         "atr": 0.56
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "NGQ6",
       "name": "Природный газ",
       "group": "commodities",
-      "current_price": 2.781,
-      "change_pct": -2.59,
+      "current_price": 2.773,
+      "change_pct": -2.87,
       "signal": "SHORT",
       "mode": "BEARISH",
       "score": -1.5,
       "priority": "MEDIUM",
       "stop_loss": 2.81,
-      "tp1": 2.73,
-      "tp2": 2.68,
-      "entry_range": "2.78-2.78",
+      "tp1": 2.72,
+      "tp2": 2.67,
+      "entry_range": "2.77-2.78",
       "win_rate": 68.0,
       "reasoning": "Trend: BEARISH. RSI: 45.6. Score: -1.5.",
       "indicators": {
@@ -54,22 +54,22 @@
         "macd_signal": -0.0092,
         "atr": 0.02
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "SVU6",
       "name": "Серебро",
       "group": "commodities",
-      "current_price": 65.42,
-      "change_pct": 13.79,
+      "current_price": 65.33,
+      "change_pct": 13.64,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": -1.0,
       "priority": "MEDIUM",
-      "stop_loss": 65.92,
-      "tp1": 64.67,
-      "tp2": 63.92,
-      "entry_range": "65.35-65.49",
+      "stop_loss": 65.83,
+      "tp1": 64.58,
+      "tp2": 63.83,
+      "entry_range": "65.26-65.4",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 72.8. Score: -1.0.",
       "indicators": {
@@ -82,22 +82,22 @@
         "macd_signal": -0.0137,
         "atr": 0.25
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "MXU6",
       "name": "Индекс МосБиржи",
       "group": "indices",
-      "current_price": 229150,
-      "change_pct": 17.53,
+      "current_price": 228500,
+      "change_pct": 17.19,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 1.0,
       "priority": "MEDIUM",
-      "stop_loss": 226968.31,
-      "tp1": 232422.54,
-      "tp2": 235695.08,
-      "entry_range": "228920.85-229379.15",
+      "stop_loss": 226318.31,
+      "tp1": 231772.54,
+      "tp2": 235045.08,
+      "entry_range": "228271.5-228728.5",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 37.9. Score: 1.0.",
       "indicators": {
@@ -110,7 +110,7 @@
         "macd_signal": -377.9544,
         "atr": 1090.85
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     }
   ],
   "all_assets": [
@@ -118,16 +118,16 @@
       "ticker": "BRU6",
       "name": "Нефть Brent",
       "group": "commodities",
-      "current_price": 87.17,
-      "change_pct": 0.88,
+      "current_price": 87.57,
+      "change_pct": 1.34,
       "signal": "LONG",
       "mode": "BULLISH",
       "score": 2.0,
       "priority": "MEDIUM",
-      "stop_loss": 86.05,
-      "tp1": 88.85,
-      "tp2": 90.53,
-      "entry_range": "87.08-87.26",
+      "stop_loss": 86.45,
+      "tp1": 89.25,
+      "tp2": 90.93,
+      "entry_range": "87.48-87.66",
       "win_rate": 69.0,
       "reasoning": "Trend: BULLISH. RSI: 33.6. Score: 2.0.",
       "indicators": {
@@ -140,22 +140,22 @@
         "macd_signal": 0.5451,
         "atr": 0.56
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "NGQ6",
       "name": "Природный газ",
       "group": "commodities",
-      "current_price": 2.781,
-      "change_pct": -2.59,
+      "current_price": 2.773,
+      "change_pct": -2.87,
       "signal": "SHORT",
       "mode": "BEARISH",
       "score": -1.5,
       "priority": "MEDIUM",
       "stop_loss": 2.81,
-      "tp1": 2.73,
-      "tp2": 2.68,
-      "entry_range": "2.78-2.78",
+      "tp1": 2.72,
+      "tp2": 2.67,
+      "entry_range": "2.77-2.78",
       "win_rate": 68.0,
       "reasoning": "Trend: BEARISH. RSI: 45.6. Score: -1.5.",
       "indicators": {
@@ -168,14 +168,14 @@
         "macd_signal": -0.0092,
         "atr": 0.02
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "GDU6",
       "name": "Золото",
       "group": "commodities",
-      "current_price": 4400.3,
-      "change_pct": 8.97,
+      "current_price": 4393.2,
+      "change_pct": 8.79,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": -0.5,
@@ -183,7 +183,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "4395.9-4404.7",
+      "entry_range": "4388.81-4397.59",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 53.4. Score: -0.5.",
       "indicators": {
@@ -196,22 +196,22 @@
         "macd_signal": 0.1845,
         "atr": 10.61
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "SVU6",
       "name": "Серебро",
       "group": "commodities",
-      "current_price": 65.42,
-      "change_pct": 13.79,
+      "current_price": 65.33,
+      "change_pct": 13.64,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": -1.0,
       "priority": "MEDIUM",
-      "stop_loss": 65.92,
-      "tp1": 64.67,
-      "tp2": 63.92,
-      "entry_range": "65.35-65.49",
+      "stop_loss": 65.83,
+      "tp1": 64.58,
+      "tp2": 63.83,
+      "entry_range": "65.26-65.4",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 72.8. Score: -1.0.",
       "indicators": {
@@ -224,14 +224,14 @@
         "macd_signal": -0.0137,
         "atr": 0.25
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "SiU6",
       "name": "USD/RUB",
       "group": "currency",
-      "current_price": 84624,
-      "change_pct": 6.8,
+      "current_price": 84663,
+      "change_pct": 6.85,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 0.5,
@@ -239,7 +239,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "84539.38-84708.62",
+      "entry_range": "84578.34-84747.66",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 43.9. Score: 0.5.",
       "indicators": {
@@ -252,22 +252,22 @@
         "macd_signal": -12.6279,
         "atr": 206.16
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "MXU6",
       "name": "Индекс МосБиржи",
       "group": "indices",
-      "current_price": 229150,
-      "change_pct": 17.53,
+      "current_price": 228500,
+      "change_pct": 17.19,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 1.0,
       "priority": "MEDIUM",
-      "stop_loss": 226968.31,
-      "tp1": 232422.54,
-      "tp2": 235695.08,
-      "entry_range": "228920.85-229379.15",
+      "stop_loss": 226318.31,
+      "tp1": 231772.54,
+      "tp2": 235045.08,
+      "entry_range": "228271.5-228728.5",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 37.9. Score: 1.0.",
       "indicators": {
@@ -280,14 +280,14 @@
         "macd_signal": -377.9544,
         "atr": 1090.85
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "SRU6",
       "name": "Сбербанк",
       "group": "stocks",
-      "current_price": 28481,
-      "change_pct": 11.97,
+      "current_price": 28427,
+      "change_pct": 11.76,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": -0.5,
@@ -295,7 +295,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "28452.52-28509.48",
+      "entry_range": "28398.57-28455.43",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 43.4. Score: -0.5.",
       "indicators": {
@@ -308,14 +308,14 @@
         "macd_signal": 47.2411,
         "atr": 170.0
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     },
     {
       "ticker": "GZU6",
       "name": "Газпром",
       "group": "stocks",
-      "current_price": 9116,
-      "change_pct": 8.07,
+      "current_price": 9085,
+      "change_pct": 7.71,
       "signal": "HOLD",
       "mode": "BULLISH",
       "score": 0.0,
@@ -323,7 +323,7 @@
       "stop_loss": null,
       "tp1": null,
       "tp2": null,
-      "entry_range": "9106.88-9125.12",
+      "entry_range": "9075.92-9094.08",
       "win_rate": 0,
       "reasoning": "Trend: BULLISH. RSI: 66.7. Score: 0.0.",
       "indicators": {
@@ -336,15 +336,15 @@
         "macd_signal": -7.9774,
         "atr": 102.22
       },
-      "last_update": "14:27"
+      "last_update": "15:07"
     }
   ],
   "heatmap": [
     {
       "ticker": "BRU6",
       "name": "Нефть Brent",
-      "change": 0.88,
-      "price": 87.17,
+      "change": 1.34,
+      "price": 87.57,
       "signal": "LONG",
       "mode": "BULLISH",
       "rsi": 33.6
@@ -352,8 +352,8 @@
     {
       "ticker": "NGQ6",
       "name": "Природный газ",
-      "change": -2.59,
-      "price": 2.781,
+      "change": -2.87,
+      "price": 2.773,
       "signal": "SHORT",
       "mode": "BEARISH",
       "rsi": 45.6
@@ -361,8 +361,8 @@
     {
       "ticker": "GDU6",
       "name": "Золото",
-      "change": 8.97,
-      "price": 4400.3,
+      "change": 8.79,
+      "price": 4393.2,
       "signal": "HOLD",
       "mode": "BULLISH",
       "rsi": 53.4
@@ -370,8 +370,8 @@
     {
       "ticker": "SVU6",
       "name": "Серебро",
-      "change": 13.79,
-      "price": 65.42,
+      "change": 13.64,
+      "price": 65.33,
       "signal": "HOLD",
       "mode": "BULLISH",
       "rsi": 72.8
@@ -379,8 +379,8 @@
     {
       "ticker": "SiU6",
       "name": "USD/RUB",
-      "change": 6.8,
-      "price": 84624,
+      "change": 6.85,
+      "price": 84663,
       "signal": "HOLD",
       "mode": "BULLISH",
       "rsi": 43.9
@@ -388,8 +388,8 @@
     {
       "ticker": "MXU6",
       "name": "Индекс МосБиржи",
-      "change": 17.53,
-      "price": 229150,
+      "change": 17.19,
+      "price": 228500,
       "signal": "HOLD",
       "mode": "BULLISH",
       "rsi": 37.9
@@ -397,8 +397,8 @@
     {
       "ticker": "SRU6",
       "name": "Сбербанк",
-      "change": 11.97,
-      "price": 28481,
+      "change": 11.76,
+      "price": 28427,
       "signal": "HOLD",
       "mode": "BULLISH",
       "rsi": 43.4
@@ -406,8 +406,8 @@
     {
       "ticker": "GZU6",
       "name": "Газпром",
-      "change": 8.07,
-      "price": 9116,
+      "change": 7.71,
+      "price": 9085,
       "signal": "HOLD",
       "mode": "BULLISH",
       "rsi": 66.7
@@ -420,5 +420,5 @@
     "short": 1,
     "hold": 6
   },
-  "last_update": "13.08 14:27"
+  "last_update": "13.08 15:07"
 }
