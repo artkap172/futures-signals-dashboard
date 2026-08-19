@@ -26,7 +26,7 @@
         "macd_signal": -0.0807,
         "atr": 0.82
       },
-      "last_update": "02:25"
+      "last_update": "02:43"
     },
     {
       "ticker": "NGQ6",
@@ -54,35 +54,7 @@
         "macd_signal": -0.0044,
         "atr": 0.01
       },
-      "last_update": "02:25"
-    },
-    {
-      "ticker": "GDU6",
-      "name": "Золото",
-      "group": "commodities",
-      "current_price": 4535.5,
-      "change_pct": 11.29,
-      "signal": "LONG",
-      "mode": "BULLISH",
-      "score": 1.5,
-      "priority": "MEDIUM",
-      "stop_loss": 4515.23,
-      "tp1": 4565.9,
-      "tp2": 4596.3,
-      "entry_range": "4530.96-4540.04",
-      "win_rate": 68.0,
-      "reasoning": "Trend: BULLISH. RSI: 46.0. Score: 1.5.",
-      "indicators": {
-        "rsi": 46.0,
-        "ema50": 4084.47,
-        "ema200": 4080.25,
-        "bbl": 4061.36,
-        "bbu": 4094.85,
-        "macd": -2.5116,
-        "macd_signal": -3.2862,
-        "atr": 10.13
-      },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "SVU6",
@@ -110,7 +82,7 @@
         "macd_signal": -0.0219,
         "atr": 0.38
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "MXU6",
@@ -138,7 +110,7 @@
         "macd_signal": 1504.4545,
         "atr": 2068.55
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "SRU6",
@@ -166,7 +138,7 @@
         "macd_signal": 143.0976,
         "atr": 139.24
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "GZU6",
@@ -194,7 +166,7 @@
         "macd_signal": 75.5479,
         "atr": 76.1
       },
-      "last_update": "02:26"
+      "last_update": "02:44"
     }
   ],
   "all_assets": [
@@ -224,7 +196,7 @@
         "macd_signal": -0.0807,
         "atr": 0.82
       },
-      "last_update": "02:25"
+      "last_update": "02:43"
     },
     {
       "ticker": "NGQ6",
@@ -252,35 +224,7 @@
         "macd_signal": -0.0044,
         "atr": 0.01
       },
-      "last_update": "02:25"
-    },
-    {
-      "ticker": "GDU6",
-      "name": "Золото",
-      "group": "commodities",
-      "current_price": 4535.5,
-      "change_pct": 11.29,
-      "signal": "LONG",
-      "mode": "BULLISH",
-      "score": 1.5,
-      "priority": "MEDIUM",
-      "stop_loss": 4515.23,
-      "tp1": 4565.9,
-      "tp2": 4596.3,
-      "entry_range": "4530.96-4540.04",
-      "win_rate": 68.0,
-      "reasoning": "Trend: BULLISH. RSI: 46.0. Score: 1.5.",
-      "indicators": {
-        "rsi": 46.0,
-        "ema50": 4084.47,
-        "ema200": 4080.25,
-        "bbl": 4061.36,
-        "bbu": 4094.85,
-        "macd": -2.5116,
-        "macd_signal": -3.2862,
-        "atr": 10.13
-      },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "SVU6",
@@ -308,7 +252,7 @@
         "macd_signal": -0.0219,
         "atr": 0.38
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "SiU6",
@@ -336,7 +280,7 @@
         "macd_signal": 282.5948,
         "atr": 231.99
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "MXU6",
@@ -364,7 +308,7 @@
         "macd_signal": 1504.4545,
         "atr": 2068.55
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "SRU6",
@@ -392,7 +336,7 @@
         "macd_signal": 143.0976,
         "atr": 139.24
       },
-      "last_update": "02:25"
+      "last_update": "02:44"
     },
     {
       "ticker": "GZU6",
@@ -420,7 +364,7 @@
         "macd_signal": 75.5479,
         "atr": 76.1
       },
-      "last_update": "02:26"
+      "last_update": "02:44"
     }
   ],
   "heatmap": [
@@ -441,15 +385,6 @@
       "signal": "SHORT",
       "mode": "BEARISH",
       "rsi": 44.5
-    },
-    {
-      "ticker": "GDU6",
-      "name": "Золото",
-      "change": 11.29,
-      "price": 4535.5,
-      "signal": "LONG",
-      "mode": "BULLISH",
-      "rsi": 46.0
     },
     {
       "ticker": "SVU6",
@@ -499,10 +434,10 @@
   ],
   "market_sentiment": "BULLISH",
   "stats": {
-    "total": 8,
-    "long": 3,
+    "total": 7,
+    "long": 2,
     "short": 1,
     "hold": 4
   },
-  "last_update": "20.08 02:26"
+  "last_update": "20.08 02:44"
 }
