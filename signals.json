@@ -26,7 +26,7 @@
         "macd_signal": 3.3289,
         "atr": 15.04
       },
-      "last_update": "00:30"
+      "last_update": "02:16"
     },
     {
       "ticker": "SVU6",
@@ -54,7 +54,7 @@
         "macd_signal": 0.225,
         "atr": 0.39
       },
-      "last_update": "00:30"
+      "last_update": "02:16"
     },
     {
       "ticker": "SiU6",
@@ -66,23 +66,23 @@
       "mode": "BULLISH",
       "score": 1.5,
       "priority": "MEDIUM",
-      "stop_loss": 85431.77,
-      "tp1": 86402.34,
-      "tp2": 86984.68,
+      "stop_loss": 85421.91,
+      "tp1": 86417.13,
+      "tp2": 87014.26,
       "entry_range": "85734.18-85905.82",
       "win_rate": 68.0,
-      "reasoning": "Trend: BULLISH. RSI: 49.2. Score: 1.5.",
+      "reasoning": "Trend: BULLISH. RSI: 49.1. Score: 1.5.",
       "indicators": {
-        "rsi": 49.2,
-        "ema50": 83124.57,
-        "ema200": 81994.94,
-        "bbl": 82721.59,
-        "bbu": 83590.31,
-        "macd": 47.8477,
-        "macd_signal": 37.5389,
-        "atr": 194.11
+        "rsi": 49.1,
+        "ema50": 83127.28,
+        "ema200": 81995.65,
+        "bbl": 82718.06,
+        "bbu": 83601.04,
+        "macd": 52.2822,
+        "macd_signal": 39.3447,
+        "atr": 199.04
       },
-      "last_update": "00:31"
+      "last_update": "02:16"
     },
     {
       "ticker": "SRU6",
@@ -110,7 +110,7 @@
         "macd_signal": 35.3983,
         "atr": 71.34
       },
-      "last_update": "00:31"
+      "last_update": "02:17"
     }
   ],
   "all_assets": [
@@ -140,7 +140,7 @@
         "macd_signal": 1.1619,
         "atr": 0.63
       },
-      "last_update": "00:30"
+      "last_update": "02:16"
     },
     {
       "ticker": "NGU6",
@@ -168,7 +168,7 @@
         "macd_signal": 0.0086,
         "atr": 0.02
       },
-      "last_update": "00:30"
+      "last_update": "02:16"
     },
     {
       "ticker": "GDU6",
@@ -196,7 +196,7 @@
         "macd_signal": 3.3289,
         "atr": 15.04
       },
-      "last_update": "00:30"
+      "last_update": "02:16"
     },
     {
       "ticker": "SVU6",
@@ -224,7 +224,7 @@
         "macd_signal": 0.225,
         "atr": 0.39
       },
-      "last_update": "00:30"
+      "last_update": "02:16"
     },
     {
       "ticker": "SiU6",
@@ -236,23 +236,23 @@
       "mode": "BULLISH",
       "score": 1.5,
       "priority": "MEDIUM",
-      "stop_loss": 85431.77,
-      "tp1": 86402.34,
-      "tp2": 86984.68,
+      "stop_loss": 85421.91,
+      "tp1": 86417.13,
+      "tp2": 87014.26,
       "entry_range": "85734.18-85905.82",
       "win_rate": 68.0,
-      "reasoning": "Trend: BULLISH. RSI: 49.2. Score: 1.5.",
+      "reasoning": "Trend: BULLISH. RSI: 49.1. Score: 1.5.",
       "indicators": {
-        "rsi": 49.2,
-        "ema50": 83124.57,
-        "ema200": 81994.94,
-        "bbl": 82721.59,
-        "bbu": 83590.31,
-        "macd": 47.8477,
-        "macd_signal": 37.5389,
-        "atr": 194.11
+        "rsi": 49.1,
+        "ema50": 83127.28,
+        "ema200": 81995.65,
+        "bbl": 82718.06,
+        "bbu": 83601.04,
+        "macd": 52.2822,
+        "macd_signal": 39.3447,
+        "atr": 199.04
       },
-      "last_update": "00:31"
+      "last_update": "02:16"
     },
     {
       "ticker": "MXU6",
@@ -280,7 +280,7 @@
         "macd_signal": 185.4758,
         "atr": 890.63
       },
-      "last_update": "00:31"
+      "last_update": "02:17"
     },
     {
       "ticker": "SRU6",
@@ -308,7 +308,7 @@
         "macd_signal": 35.3983,
         "atr": 71.34
       },
-      "last_update": "00:31"
+      "last_update": "02:17"
     },
     {
       "ticker": "GZU6",
@@ -336,7 +336,7 @@
         "macd_signal": 5.1584,
         "atr": 45.32
       },
-      "last_update": "00:31"
+      "last_update": "02:17"
     }
   ],
   "heatmap": [
@@ -383,7 +383,7 @@
       "price": 85820,
       "signal": "LONG",
       "mode": "BULLISH",
-      "rsi": 49.2
+      "rsi": 49.1
     },
     {
       "ticker": "MXU6",
@@ -420,5 +420,5 @@
     "short": 0,
     "hold": 7
   },
-  "last_update": "06.09 00:31"
+  "last_update": "06.09 02:17"
 }
