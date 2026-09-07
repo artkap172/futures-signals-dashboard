@@ -26,7 +26,7 @@
         "macd_signal": 0.2265,
         "atr": 0.47
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     },
     {
       "ticker": "SiU6",
@@ -38,23 +38,23 @@
       "mode": "BULLISH",
       "score": 1.0,
       "priority": "MEDIUM",
-      "stop_loss": 85456.29,
-      "tp1": 86325.57,
-      "tp2": 86847.13,
+      "stop_loss": 85459.3,
+      "tp1": 86321.05,
+      "tp2": 86838.1,
       "entry_range": "85718.2-85889.8",
       "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 68.7. Score: 1.0.",
+      "reasoning": "Trend: BULLISH. RSI: 69.3. Score: 1.0.",
       "indicators": {
-        "rsi": 68.7,
-        "ema50": 83369.21,
-        "ema200": 82241.44,
-        "bbl": 83224.04,
-        "bbu": 83902.36,
-        "macd": 127.2472,
-        "macd_signal": 113.3894,
-        "atr": 173.86
+        "rsi": 69.3,
+        "ema50": 83367.78,
+        "ema200": 82240.83,
+        "bbl": 83211.73,
+        "bbu": 83907.47,
+        "macd": 128.0414,
+        "macd_signal": 113.848,
+        "atr": 172.35
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     }
   ],
   "all_assets": [
@@ -73,18 +73,18 @@
       "tp2": null,
       "entry_range": "96.91-97.11",
       "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 61.2. Score: 0.0.",
+      "reasoning": "Trend: BULLISH. RSI: 61.3. Score: 0.0.",
       "indicators": {
-        "rsi": 61.2,
+        "rsi": 61.3,
         "ema50": 85.05,
         "ema200": 83.1,
-        "bbl": 85.5,
-        "bbu": 88.2,
-        "macd": 0.6948,
-        "macd_signal": 0.7764,
-        "atr": 0.62
+        "bbl": 85.51,
+        "bbu": 88.19,
+        "macd": 0.6906,
+        "macd_signal": 0.7738,
+        "atr": 0.63
       },
-      "last_update": "01:20"
+      "last_update": "03:06"
     },
     {
       "ticker": "NGU6",
@@ -112,7 +112,7 @@
         "macd_signal": 0.0093,
         "atr": 0.02
       },
-      "last_update": "01:20"
+      "last_update": "03:06"
     },
     {
       "ticker": "GDU6",
@@ -140,7 +140,7 @@
         "macd_signal": 9.3304,
         "atr": 16.39
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     },
     {
       "ticker": "SVU6",
@@ -168,7 +168,7 @@
         "macd_signal": 0.2265,
         "atr": 0.47
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     },
     {
       "ticker": "SiU6",
@@ -180,23 +180,23 @@
       "mode": "BULLISH",
       "score": 1.0,
       "priority": "MEDIUM",
-      "stop_loss": 85456.29,
-      "tp1": 86325.57,
-      "tp2": 86847.13,
+      "stop_loss": 85459.3,
+      "tp1": 86321.05,
+      "tp2": 86838.1,
       "entry_range": "85718.2-85889.8",
       "win_rate": 0,
-      "reasoning": "Trend: BULLISH. RSI: 68.7. Score: 1.0.",
+      "reasoning": "Trend: BULLISH. RSI: 69.3. Score: 1.0.",
       "indicators": {
-        "rsi": 68.7,
-        "ema50": 83369.21,
-        "ema200": 82241.44,
-        "bbl": 83224.04,
-        "bbu": 83902.36,
-        "macd": 127.2472,
-        "macd_signal": 113.3894,
-        "atr": 173.86
+        "rsi": 69.3,
+        "ema50": 83367.78,
+        "ema200": 82240.83,
+        "bbl": 83211.73,
+        "bbu": 83907.47,
+        "macd": 128.0414,
+        "macd_signal": 113.848,
+        "atr": 172.35
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     },
     {
       "ticker": "MXU6",
@@ -224,7 +224,7 @@
         "macd_signal": 696.3998,
         "atr": 953.94
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     },
     {
       "ticker": "SRU6",
@@ -241,25 +241,25 @@
       "tp2": null,
       "entry_range": "27801.17-27856.83",
       "win_rate": 0,
-      "reasoning": "Trend: BEARISH. RSI: 35.9. Score: 0.0.",
+      "reasoning": "Trend: BEARISH. RSI: 36.0. Score: 0.0.",
       "indicators": {
-        "rsi": 35.9,
-        "ema50": 28962.2,
-        "ema200": 28583.12,
-        "bbl": 28922.08,
-        "bbu": 29196.82,
-        "macd": 25.1918,
-        "macd_signal": 50.1039,
+        "rsi": 36.0,
+        "ema50": 28962.34,
+        "ema200": 28583.16,
+        "bbl": 28921.71,
+        "bbu": 29197.59,
+        "macd": 25.3294,
+        "macd_signal": 50.2254,
         "atr": 82.02
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     },
     {
       "ticker": "GZU6",
       "name": "Газпром",
       "group": "stocks",
       "current_price": 9017,
-      "change_pct": -5.21,
+      "change_pct": -5.25,
       "signal": "HOLD",
       "mode": "BEARISH",
       "score": -0.5,
@@ -269,18 +269,18 @@
       "tp2": null,
       "entry_range": "9007.98-9026.02",
       "win_rate": 0,
-      "reasoning": "Trend: BEARISH. RSI: 54.0. Score: -0.5.",
+      "reasoning": "Trend: BEARISH. RSI: 54.7. Score: -0.5.",
       "indicators": {
-        "rsi": 54.0,
-        "ema50": 9481.16,
-        "ema200": 9444.18,
-        "bbl": 9458.67,
-        "bbu": 9546.93,
-        "macd": 11.5511,
-        "macd_signal": 13.3337,
+        "rsi": 54.7,
+        "ema50": 9481.31,
+        "ema200": 9444.22,
+        "bbl": 9458.64,
+        "bbu": 9547.36,
+        "macd": 11.8702,
+        "macd_signal": 13.3975,
         "atr": 46.5
       },
-      "last_update": "01:20"
+      "last_update": "03:07"
     }
   ],
   "heatmap": [
@@ -291,7 +291,7 @@
       "price": 97.01,
       "signal": "HOLD",
       "mode": "BULLISH",
-      "rsi": 61.2
+      "rsi": 61.3
     },
     {
       "ticker": "NGU6",
@@ -327,7 +327,7 @@
       "price": 85804,
       "signal": "HOLD",
       "mode": "BULLISH",
-      "rsi": 68.7
+      "rsi": 69.3
     },
     {
       "ticker": "MXU6",
@@ -345,16 +345,16 @@
       "price": 27829,
       "signal": "HOLD",
       "mode": "BEARISH",
-      "rsi": 35.9
+      "rsi": 36.0
     },
     {
       "ticker": "GZU6",
       "name": "Газпром",
-      "change": -5.21,
+      "change": -5.25,
       "price": 9017,
       "signal": "HOLD",
       "mode": "BEARISH",
-      "rsi": 54.0
+      "rsi": 54.7
     }
   ],
   "market_sentiment": "BULLISH",
@@ -364,5 +364,5 @@
     "short": 0,
     "hold": 7
   },
-  "last_update": "07.09 01:20"
+  "last_update": "07.09 03:07"
 }
