@@ -26,7 +26,7 @@
         "macd_signal": 0.4507,
         "atr": 0.61
       },
-      "last_update": "02:43"
+      "last_update": "04:34"
     },
     {
       "ticker": "MXU6",
@@ -54,7 +54,7 @@
         "macd_signal": -3140.5124,
         "atr": 2206.76
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "GZU6",
@@ -82,7 +82,7 @@
         "macd_signal": -117.6466,
         "atr": 90.79
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     }
   ],
   "all_assets": [
@@ -112,7 +112,7 @@
         "macd_signal": 0.4507,
         "atr": 0.61
       },
-      "last_update": "02:43"
+      "last_update": "04:34"
     },
     {
       "ticker": "NGU6",
@@ -140,7 +140,7 @@
         "macd_signal": -0.0065,
         "atr": 0.02
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "GDU6",
@@ -168,7 +168,7 @@
         "macd_signal": 6.502,
         "atr": 13.51
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "SVU6",
@@ -196,7 +196,7 @@
         "macd_signal": 0.1576,
         "atr": 0.38
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "SiU6",
@@ -224,7 +224,7 @@
         "macd_signal": 284.3004,
         "atr": 266.31
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "MXU6",
@@ -252,7 +252,7 @@
         "macd_signal": -3140.5124,
         "atr": 2206.76
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "SRU6",
@@ -280,7 +280,7 @@
         "macd_signal": -130.8062,
         "atr": 162.62
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     },
     {
       "ticker": "GZU6",
@@ -308,7 +308,7 @@
         "macd_signal": -117.6466,
         "atr": 90.79
       },
-      "last_update": "02:44"
+      "last_update": "04:34"
     }
   ],
   "heatmap": [
@@ -392,5 +392,5 @@
     "short": 0,
     "hold": 8
   },
-  "last_update": "12.09 02:44"
+  "last_update": "12.09 04:34"
 }
