@@ -26,7 +26,7 @@
         "macd_signal": 0.0055,
         "atr": 0.02
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "SRZ6",
@@ -54,7 +54,7 @@
         "macd_signal": 22.5437,
         "atr": 142.69
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     }
   ],
   "all_assets": [
@@ -84,7 +84,7 @@
         "macd_signal": 0.6619,
         "atr": 0.57
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "NGU6",
@@ -112,7 +112,7 @@
         "macd_signal": 0.0055,
         "atr": 0.02
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "GDZ6",
@@ -140,7 +140,7 @@
         "macd_signal": -11.1159,
         "atr": 15.47
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "SVZ6",
@@ -168,7 +168,7 @@
         "macd_signal": -0.1992,
         "atr": 0.36
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "SiZ6",
@@ -196,7 +196,7 @@
         "macd_signal": -69.1448,
         "atr": 265.51
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "MXZ6",
@@ -224,7 +224,7 @@
         "macd_signal": 1261.1749,
         "atr": 1342.21
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "SRZ6",
@@ -252,7 +252,7 @@
         "macd_signal": 22.5437,
         "atr": 142.69
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     },
     {
       "ticker": "GZZ6",
@@ -280,7 +280,7 @@
         "macd_signal": 16.2963,
         "atr": 79.01
       },
-      "last_update": "01:48"
+      "last_update": "04:04"
     }
   ],
   "heatmap": [
@@ -364,5 +364,5 @@
     "short": 0,
     "hold": 7
   },
-  "last_update": "26.09 01:48"
+  "last_update": "26.09 04:04"
 }
