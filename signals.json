@@ -26,7 +26,7 @@
         "macd_signal": 1.2759,
         "atr": 1.01
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "GDZ6",
@@ -54,7 +54,7 @@
         "macd_signal": -14.3902,
         "atr": 20.19
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "MXZ6",
@@ -82,7 +82,7 @@
         "macd_signal": 706.2272,
         "atr": 1349.3
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     }
   ],
   "all_assets": [
@@ -112,7 +112,7 @@
         "macd_signal": 1.2759,
         "atr": 1.01
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "NGV6",
@@ -140,7 +140,7 @@
         "macd_signal": -0.0051,
         "atr": 0.02
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "GDZ6",
@@ -168,7 +168,7 @@
         "macd_signal": -14.3902,
         "atr": 20.19
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "SVZ6",
@@ -196,7 +196,7 @@
         "macd_signal": -0.544,
         "atr": 0.58
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "SiZ6",
@@ -224,7 +224,7 @@
         "macd_signal": -285.6084,
         "atr": 275.74
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "MXZ6",
@@ -252,7 +252,7 @@
         "macd_signal": 706.2272,
         "atr": 1349.3
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "SRZ6",
@@ -280,7 +280,7 @@
         "macd_signal": 62.0341,
         "atr": 121.06
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     },
     {
       "ticker": "GZZ6",
@@ -308,7 +308,7 @@
         "macd_signal": 45.8305,
         "atr": 69.28
       },
-      "last_update": "01:55"
+      "last_update": "04:54"
     }
   ],
   "heatmap": [
@@ -392,5 +392,5 @@
     "short": 1,
     "hold": 5
   },
-  "last_update": "07.10 01:55"
+  "last_update": "07.10 04:54"
 }
